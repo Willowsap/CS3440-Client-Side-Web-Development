@@ -6,20 +6,20 @@ h1 {
     color: rgb(255, 255, 255); 
 }
 p {
-    opacity: 0.4;
+    background-color: rgb(175, 174, 174);
 }
 h2 {
     color: rgb(220, 220, 220); /* Same as gainsboro */
     background-color: rgba(42, 150, 26, 0.8);
 }
 ul#transparencies>li {
-    background-color:rgba(107, 240, 255, 0.4);
+    background-color:rgb(103, 124, 182);
 }
 ol.fetts {
     background-color: rgb(255, 215, 0); /* Same as Gold */
 }
 blockquote {
-    color : rgb(255,0,255); /* Same as Magenta */
+    color : rgb(196, 110, 196); /* Same as Magenta */
 }
 dt {
     color: rgba(25, 107, 27, 0.671);
