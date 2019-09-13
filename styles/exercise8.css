@@ -16,8 +16,14 @@ ul#transparencies>li {
     background-color:rgba(107, 240, 255, 0.4);
 }
 ol.fetts {
-    background-color: rgb(255, 215, 0) /* Same as Gold */
+    background-color: rgb(255, 215, 0); /* Same as Gold */
 }
 blockquote {
-    color : rgb(255,0,255) /* Same as Magenta */
+    color : rgb(255,0,255); /* Same as Magenta */
+}
+dt {
+    color: rgba(25, 107, 27, 0.671);
+}
+dd {
+    color: hsl(171, 80%, 75%);
 }
