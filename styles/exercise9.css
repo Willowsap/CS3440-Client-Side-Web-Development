@@ -1,0 +1,26 @@
+@font-face {
+    font-family: LobsterTwo-Bold;
+    src: url(../fonts/LobsterTwo-Bold.otf);
+}
+@font-face {
+    font-family: LobsterTwo-Regular;
+    src: url(../fonts/LobsterTwo-Regular.otf);
+}
+p {
+    text-shadow: 2px 2px 2px lightslategray;
+}
+p:first-child {
+    font-family: "LobsterTwo-Regular";
+    text-align: center;
+    font-size: 1.4em;
+    text-transform: uppercase;
+    color: blue;
+    letter-spacing: -2px;
+}
+p+p {
+    font-family: "LobsterTwo-Bold";
+    text-align: center;
+    font-size: 1.4em;
+    color:red;
+    letter-spacing: 2px;
+}
