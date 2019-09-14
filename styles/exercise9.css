@@ -6,8 +6,11 @@
     font-family: LobsterTwo-Regular;
     src: url(../fonts/LobsterTwo-Regular.otf);
 }
+body {
+    background-color: gray;
+}
 p {
-    text-shadow: 2px 2px 2px lightslategray;
+    text-shadow: 3px 2px 4px rgb(55, 58, 61);
 }
 p:first-child {
     font-family: "LobsterTwo-Regular";
@@ -22,5 +25,14 @@ p+p {
     text-align: center;
     font-size: 1.4em;
     color:red;
-    letter-spacing: 2px;
+    word-spacing: 0.6em;
+}
+span+span {
+    text-transform: capitalize;
+}
+span span {
+    color: green;
+}
+span[go] {
+    text-decoration: line-through;
 }
