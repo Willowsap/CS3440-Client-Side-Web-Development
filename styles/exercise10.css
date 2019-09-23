@@ -1,0 +1,44 @@
+body {
+    background-color: palegoldenrod;
+    align-items: center;
+}
+p.first {
+    background-color: gainsboro;
+    margin-left: 10em;
+    margin-right: 10em;
+}
+p.second {
+    background-color: gainsboro;
+    margin-left: 10em;
+    margin-right: 10em;
+    box-shadow: 5px 5px gray;
+}
+p.third {
+    border-style: solid;
+    border-width: 5px;
+    border-color: black;
+    padding: 2em;
+    margin-left: 12em;
+    margin-right: 12em;
+    box-shadow: 5px 5px gray;
+    justify-content: center;
+}
+p.fourth {
+    border-style: solid;
+    border-width: 5px;
+    border-color: black;
+    border-radius: 60px;
+    margin-left: 16em;
+    margin-right: 16em;
+    margin-top: 4em;
+    margin-bottom: 4em;
+    padding: 1em;
+    box-shadow: 5px 5px gray;
+}
+p.fifth {
+    border: 10px solid;
+    padding: 10px;
+    border-image: url(../images/border.png) 40% round;
+    margin-left: 10em;
+    margin-right: 10em;
+}
