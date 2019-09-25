@@ -1,0 +1,20 @@
+li.classes {
+    list-style-image: url("../images/star.png");
+}
+li.menu {
+    display: inline;
+    margin-right: 10px;
+    font-family: sans-serif;
+    padding-left: 2px;
+    padding-right: 10px;
+    color: black;
+}
+li.menu :hover {
+    color: rgb(145, 36, 145);
+}
+hr {
+    width: 75%;
+}
+table {
+    min-width: 500px;
+}
