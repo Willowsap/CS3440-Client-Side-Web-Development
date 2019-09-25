@@ -21,7 +21,7 @@ p.third {
     margin-left: 12em;
     margin-right: 12em;
     box-shadow: 5px 5px gray;
-    justify-content: center;
+    text-align: justify;
 }
 p.fourth {
     border-style: solid;
