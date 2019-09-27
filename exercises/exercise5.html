@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Exercise 5 Form</title>
+</head>
+<body>
+    <h1>Contact Us</h1>
+    <form action="http://student2.cs.appstate.edu/crr/3440/homework/h3/contact/"
+        method="post">
+        <!--Email Information Section-->
+        <fieldset>
+            <legend>Send Us Feedback</legend>
+            <!--Email To: Our email, not changeable-->
+            <label for="emailTo">To:<br>
+                <input 
+                    name='emailTo' 
+                    id="emailTo" 
+                    type='text' 
+                    value="Aceme Corporation" 
+                    size="18" 
+                    readonly>
+            </label><br><br>
+
+            <!--Email From: Their email, required-->
+            <label for="emailFrom">Your email address:<br>
+                <input 
+                    name='emailFrom' 
+                    id="emailFrom" 
+                    type="email" 
+                    size="18" 
+                    required>
+            </label><br><br>
+
+            <!--Email Message: Their message to us-->
+            <label for="emailBody">Message<br>
+                <textarea 
+                    name="emailBody" 
+                    id="emailBody"
+                    cols="20"
+                    rows="5"
+                    placeholder="Type your message here..."></textarea>
+            </label>
+        </fieldset>
+
+        <!--Survey Question Section-->
+        <fieldset>
+            <legend>Survey Questions</legend>
+            <!--List of possible referrers-->
+            <label for="referrer">How did you hear about us?<br>
+                <select name="referrer" id="referrer">
+                    <option value="google">Google</option>
+                    <option value="ad">Newspaper Ad</option>
+                    <option value="friend">Friend</option>
+                    <option value="other">Other</option>
+                </select>
+            </label><br><br>
+
+            <!--Newsletter question-->
+            <label for="newsletter">Would you like to receive our newsletter?<br>
+                <input 
+                    name='newsletter' 
+                    id="newsletter" 
+                    type="checkbox" 
+                    checked>
+                    Yes please. Send me the newsletter?<br>
+            </label>
+        </fieldset>
+
+        <!--Rating Section-->
+        <fieldset>
+            <legend>Rate Our Service</legend>
+            <input id="r1" name="rating" type="radio" value="1">Very Poor<br>
+            <input id="r2" name="rating" type="radio" value="2">Poor<br>
+            <input id="r3" name="rating" type="radio" value="3">Average<br>
+            <input id="r4" name="rating" type="radio" value="4">Good<br>
+            <input id="r5" name="rating" type="radio" value="5">Very Good<br>
+        </fieldset>
+        <input type="submit" value="Send Message">
+    </form>
+</body>
+</html>
