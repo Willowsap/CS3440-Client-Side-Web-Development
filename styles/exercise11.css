@@ -1,20 +1,69 @@
-li.classes {
-    list-style-image: url("../images/star.png");
+/*  Styles for the menu at the top of the page */
+li {
+    border: 0px;
 }
 li.menu {
     display: inline;
-    margin-right: 10px;
     font-family: sans-serif;
-    padding-left: 2px;
+    padding-left: 10px;
     padding-right: 10px;
+    border-color: black;
+    border-style: solid;
+    border-left-width: 2px;
+}
+/* Adds border to the end of the list */
+li.menu#lastItem {
+    border-right-width: 2px;
+}
+/* Styles for the links in the menu */
+li.menu a {
     color: black;
 }
 li.menu :hover {
     color: rgb(145, 36, 145);
 }
-hr {
-    width: 75%;
+
+/* Styles for the list of classes */
+li.classes {
+    list-style-image: url("../images/star-colored.png");
 }
+
+hr {
+    height: 2px;
+    width: 75%;
+    background-color: rgb(180, 116, 70);
+}
+
+/* Styles for the table */
 table {
+    width: 100%;
     min-width: 500px;
+    font-family: sans-serif;
+    border:0px;
+    border-collapse: collapse;
+}
+thead {
+    border-top: 2px solid rgb(40, 40, 107);
+    border-bottom: 2px solid rgb(40, 40, 107);
+}
+th {
+    text-align: left;
+    color: chocolate;
+    font-size: 20px;
+    font-weight: 100;
+    padding: 5px;
+    border-top: 2px solid rgb(40, 40, 107);
+    border-bottom: 2px solid rgb(40, 40, 107);
+}
+tr {
+    border: 0px;
+}
+tr.zebra {
+    background-color: rgb(219, 217, 217);
+}
+td {
+    text-align: left;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: 0px;
 }
