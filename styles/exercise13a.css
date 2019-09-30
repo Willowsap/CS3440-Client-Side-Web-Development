@@ -1,0 +1,44 @@
+@media (min-width: 0px) {
+    .wrapper {
+        display: grid;
+        border-color: black;
+        border-style: solid;
+        border-width: 10px;
+        grid-template-columns: 1fr;
+        background-color: black;
+        column-gap: 10px;
+        row-gap: 10px;
+    }
+    .footer {
+        background-color: goldenrod;
+    }
+}
+@media (min-width: 400px) {
+    .wrapper {
+        display: grid;
+        border-color: black;
+        border-style: solid;
+        border-width: 10px;
+        grid-template-columns: 1fr 1fr;
+        background-color: black;
+        column-gap: 10px;
+        row-gap: 10px;
+    }
+    .footer {
+        background-color: #666;
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+}
+.red {
+    background-color: #900;
+}
+.green {
+    background-color: #090;
+}
+.blue {
+    background-color: #00F;
+}
+.purple {
+    background-color: #63C;
+}
