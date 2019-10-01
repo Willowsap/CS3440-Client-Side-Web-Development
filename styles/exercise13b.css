@@ -1,0 +1,61 @@
+@media (min-width: 0px) {
+    .wrapper {
+        display: grid;
+        grid-template-areas:
+            "red "
+            "green"
+            "blue"
+            "purple"
+            "ft";
+        border-color: black;
+        border-style: solid;
+        border-width: 10px;
+        background-color: black;
+        column-gap: 10px;
+        row-gap: 10px;
+        color: black;
+    }
+    .footer {
+        grid-area: ft;
+        background-color: goldenrod;
+    }
+}
+@media (min-width: 400px) {
+    .wrapper {
+        display: grid;
+        grid-template-areas:
+            "red green blue purple"
+            "ft ft ft ft";
+        border-color: black;
+        border-style: solid;
+        border-width: 10px;
+        background-color: black;
+        column-gap: 10px;
+        row-gap: 10px;
+        color: white;
+    }
+    .footer {
+        grid-area: ft;
+        background-color: #666;
+    }
+}
+.red {
+    grid-area: red;
+    background-color: #900;
+    height: 200px;
+}
+.green {
+    grid-area: green;
+    background-color: #090;
+    height: 200px;
+}
+.blue {
+    grid-area: blue;
+    background-color: #00F;
+    height: 200px;
+}
+.purple {
+    grid-area: purple;
+    background-color: #63C;
+    height: 200px;
+}
