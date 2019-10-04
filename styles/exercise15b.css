@@ -1,0 +1,44 @@
+body {
+  font-family: Verdana,sans-serif;
+  font-size: 0.9em;
+}
+aside {
+  background-color: red;
+}
+header {
+  padding: 10px;
+  color: white;
+  background-color: green;
+}
+footer {
+  padding: 10px;
+  color: white;
+  background-color: green;
+}
+main {
+  margin: 5px;
+  padding: 10px;
+  color: white;
+  background-color: grey;
+}
+section {
+  background-color: blue;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+article {
+  margin: 5px;
+  padding: 10px;
+  color: black;
+  background-color: yellow;
+}
+nav {
+  background-color: lightblue;
+}
+nav ul {
+  padding: 0;
+}
+nav ul li {
+  display: inline;
+  margin: 5px;
+}

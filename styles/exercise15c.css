@@ -1,0 +1,52 @@
+body {
+  font-family: Verdana,sans-serif;
+  font-size: 0.9em;
+  display: grid;
+  grid-template-areas:
+    "heading" 
+    "nav-left article-section info"
+    "footer";
+}
+aside {
+  background-color: red;
+  grid-area: info;
+}
+header {
+  padding: 10px;
+  color: white;
+  background-color: green;
+  grid-area: head;
+}
+footer {
+  padding: 10px;
+  color: white;
+  background-color: green;
+  grid-area: footer;
+}
+main {
+  margin: 5px;
+  padding: 10px;
+  color: white;
+  background-color: grey;
+  grid-area: article-section;
+}
+section {
+  background-color: blue;
+}
+article {
+  margin: 5px;
+  padding: 10px;
+  color: black;
+  background-color: yellow;
+}
+nav {
+  background-color: lightblue;
+  grid-area: nav-left;
+}
+nav ul {
+  padding: 0;
+}
+nav ul li {
+  display: inline;
+  margin: 5px;
+}
