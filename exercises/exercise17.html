@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Time</title>
+</head>
+<body>
+    <h1 id="timeheader">12:00:00</h1>
+    <script>
+        ((interval) => setInterval(() => {
+            let current_date, hours, minutes, seconds, 
+            minutePad, secondPad;
+            current_date = new Date();
+            hours = current_date.getHours();
+            minutes = current_date.getMinutes();
+            seconds = current_date.getSeconds();
+            minutePad = minutes < 10 ? "0" : "";
+            secondPad = seconds < 10 ? "0" : "";
+
+            document.getElementById("timeheader")
+                .innerHTML = hours + ":" 
+                    + minutePad + minutes + ":" 
+                    + secondPad + seconds;
+        }, interval))(1000);
+    </script>
+</body>
+</html>
