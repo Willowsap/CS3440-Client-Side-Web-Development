@@ -66,7 +66,7 @@ class LemonadeStand {
                 break;
             }
         }
-        return glassesSold();
+        return glassesSold;
     }
 
     showIngredients(id) {
@@ -86,13 +86,11 @@ class LemonadeStand {
         let adminSection = "<h1>Admin</h1>";
         adminSection += "<ul>";
         for (const info in this.state.businessInfo) {
-            if (info != "Price") {
-                adminSection += "<li>";
-                adminSection += info;
-                adminSection += ": ";
-                adminSection += this.state.businessInfo[info];
-                adminSection += "</li>";
-            }
+            adminSection += "<li>";
+            adminSection += info;
+            adminSection += ": ";
+            adminSection += this.state.businessInfo[info];
+            adminSection += "</li>";
         }
         adminSection += "</ul>";
         document.getElementById(id).innerHTML = adminSection;
@@ -202,8 +200,142 @@ class LemonadeStand {
 
 const ls = new LemonadeStand(15,3,4,20,1.5);
 reload();
+addEventListeners();
 
-function reload() {
+function reload(errorCauser) {
+    setErrorMessage(errorCauser);
     ls.showIngredients("ingredients");
     ls.showAdmin("admin");
+}
+
+function makeLemonade() {
+    glassesMade = ls.makeLemonade();
+    error = glassesMade === 0 ? "make" : "";
+    reload(error);
+}
+
+function sellLemonade() {
+    if(event.srcElement.id != "sellInput") {
+        glassesSold = ls.sellMoreLemonade(Number(document.getElementById("sellInput").value));
+        if(glassesSold < Number(document.getElementById("sellInput").value)
+            && Number(document.getElementById("sellInput").value) <= 8) {
+            notEnoughLemonade(glassesSold);
+        } else if (Number(document.getElementById("sellInput").value) > 8) {
+            triedToSellToManyGlassesAtOnce(glassesSold);
+        }
+        document.getElementById("sellInput").value = "1";
+        reload();
+    }
+}
+
+function changePrice() {
+    if(event.srcElement.id != "priceInput") {
+        ls.setPrice(Number(document.getElementById("priceInput").value));
+        document.getElementById("priceInput").value = ls.getPrice();
+        reload();
+    }
+}
+
+function addLemons(event) {
+    if(event.srcElement.id != "lemonsInput") {
+        ls.setLemons(ls.getLemons() + Number(document.getElementById("lemonsInput").value));
+        document.getElementById("lemonsInput").value = "";
+        reload();
+    }
+}
+
+function addGallonsOfWater() {
+    if(event.srcElement.id != "gallonsOfWaterInput") {
+        ls.setGallonsOfWater(ls.getGallonsOfWater() + Number(document.getElementById("gallonsOfWaterInput").value));
+        document.getElementById("gallonsOfWaterInput").value = "";
+        reload();
+    }
+}
+
+function addCupsOfSugar() {
+    if(event.srcElement.id != "cupsOfSugarInput") {
+        ls.setCupsOfSugar(ls.getCupsOfSugar() + Number(document.getElementById("cupsOfSugarInput").value));
+        document.getElementById("cupsOfSugarInput").value = "";
+        reload();
+    }
+}
+
+function addEmptyGlasses() {
+    if(event.srcElement.id != "emptyGlassesInput") {
+        ls.setEmptyGlasses(ls.getEmptyGlasses() + Number(document.getElementById("emptyGlassesInput").value));
+        document.getElementById("emptyGlassesInput").value = "";
+        reload();
+    }
+}
+
+function setErrorMessage(errorCauser) {
+    let requiredIngredients = ls.ingredientsNeeded();
+    let message = "";
+    if ((!ls.getGlassesOfLemonade() || errorCauser == "make") && Object.entries(requiredIngredients).length) {
+        message = "<h2>Error: Need more Ingredients</h2>";
+        message += "<h3>Ingredients Required:</h3>";
+        message += "<ul>"
+        for (const ingredient in requiredIngredients) {
+            message += "<li>";
+            message += requiredIngredients[ingredient];
+            message += (" " + ingredient);
+            message += "</li>";
+        }
+        message += "</ul>"
+    }
+    document.getElementById("error").innerHTML = message;
+}
+
+function addEventListeners() {
+    const lemonInput = document.getElementById("lemonsInput");
+    const waterInput = document.getElementById("gallonsOfWaterInput");
+    const sugarInput = document.getElementById("cupsOfSugarInput");
+    const glassesInput = document.getElementById("emptyGlassesInput");
+    const priceInput = document.getElementById("priceInput");
+    const sellInput = document.getElementById("sellInput");
+
+    lemonInput.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13)
+            document.getElementById("lemonButton").click();
+    });
+    waterInput.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13)
+            document.getElementById("waterButton").click();
+    });
+    sugarInput.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13)
+            document.getElementById("sugarButton").click();
+    });
+    glassesInput.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13)
+            document.getElementById("glassesButton").click();
+    });
+    priceInput.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13)
+            document.getElementById("priceButton").click();
+    });
+    sellInput.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13)
+            document.getElementById("priceButton").click();
+    });
+}
+
+function notEnoughLemonade(glassesSold) {
+    message = "<h3>Not enough lemonade.<br>";
+    message += glassesSold;
+    message += " glasses sold.</h3>"
+    message += "<button onClick=dismissSellError() class='dismissButton'>Okay</button>";
+    document.getElementById("sellError").innerHTML = message;
+}
+
+function triedToSellToManyGlassesAtOnce(glassesSold) {
+    message = "<h3>Cannot sell more than 8 glasses at once.<br>";
+    message += glassesSold;
+    message += " glasses sold.</h3>";
+    message += "<button onClick=dismissSellError() class='dismissButton'>Okay</button>";
+    document.getElementById("sellError").innerHTML = message;
+}
+
+function dismissSellError() {
+    document.getElementById("sellError").innerHTML = "";
 }

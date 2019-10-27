@@ -203,7 +203,57 @@ class LemonadeStand {
 const ls = new LemonadeStand(15,3,4,20,1.5);
 reload();
 
-function reload() {
+function reload(errorCauser) {
+    setErrorMessage(errorCauser);
     ls.showIngredients("ingredients");
     ls.showAdmin("admin");
+}
+
+function makeLemonade() {
+    ls.makeLemonade();
+    reload("make");
+}
+
+function addALemon() {
+    ls.setLemons(ls.getLemons() + 1);
+    reload();
+}
+
+function addAGallonOfWater() {
+    ls.setGallonsOfWater(ls.getGallonsOfWater() + 1);
+    reload();
+}
+
+function addACupOfSugar() {
+    ls.setCupsOfSugar(ls.getCupsOfSugar() + 1);
+    reload();
+}
+
+function addAnEmptyGlass() {
+    ls.setEmptyGlasses(ls.getEmptyGlasses() + 1);
+    reload();
+}
+
+function sellLemonade() {
+    ls.sellLemonade();
+    reload();
+}
+
+function setErrorMessage(errorCauser) {
+    let requiredIngredients = ls.ingredientsNeeded();
+    let message = ""
+    console.log(requiredIngredients);
+    if ((!ls.getGlassesOfLemonade() || errorCauser == "make") && Object.entries(requiredIngredients).length) {
+        message = "<h2>Error: Need more Ingredients</h2>";
+        message += "<h3>Ingredients Required:</h3>";
+        message += "<ul>"
+        for (const ingredient in requiredIngredients) {
+            message += "<li>";
+            message += requiredIngredients[ingredient];
+            message += (" " + ingredient);
+            message += "</li>";
+        }
+        message += "</ul>"
+    }
+    document.getElementById("error").innerHTML = message;
 }
