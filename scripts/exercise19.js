@@ -316,7 +316,7 @@ function addEventListeners() {
     });
     sellInput.addEventListener("keyup", function(event) {
         if (event.keyCode === 13)
-            document.getElementById("priceButton").click();
+            document.getElementById("sellButton").click();
     });
 }
 
