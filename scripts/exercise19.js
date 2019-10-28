@@ -1,5 +1,4 @@
 class LemonadeStand {
-
     constructor(lemons, gallonsOfWater, cupsOfSugar, emptyGlasses, price) {
         // initialize state
         this.state = {
@@ -20,7 +19,9 @@ class LemonadeStand {
                 "Cups of Sugar" : 1,
                 "Empty Glasses" : 8,
                 "Glasses Produced" : 8
-            }
+            },
+            sellMoreMax : 12
+
         };
         this.setLemons(lemons);
         this.setGallonsOfWater(gallonsOfWater);
@@ -42,7 +43,7 @@ class LemonadeStand {
         this.updateBusinessInfo({
             "Glasses of Lemonade" : this.getGlassesOfLemonade() + this.state.recipe["Glasses Produced"]
         })
-        return 8;
+        return this.state.sellMoreMax;
     }
 
     sellLemonade() {
@@ -57,14 +58,12 @@ class LemonadeStand {
     }
 
     sellMoreLemonade(amount) {
-        amount = amount > 8 ? 8 : amount;
+        amount = amount > this.state.sellMoreMax ? this.state.sellMoreMax : amount;
         let glassesSold = 0;
         for (let i = 0; i < amount; i++) {
             if (this.sellLemonade()) {
                 glassesSold += 1;
-            } else {
-                break;
-            }
+            } else break;
         }
         return glassesSold;
     }
@@ -174,6 +173,10 @@ class LemonadeStand {
         return this.state.recipe;
     }
 
+    getMaxToSell() {
+        return this.state.sellMoreMax;
+    }
+
     insufficientIngredients() {
         if (this.state.ingredients["Lemons"] < this.state.recipe["Lemons"] ||
             this.state.ingredients["Gallons of Water"] < this.state.recipe["Gallons of Water"] ||
@@ -218,9 +221,9 @@ function sellLemonade() {
     if(event.srcElement.id != "sellInput") {
         glassesSold = ls.sellMoreLemonade(Number(document.getElementById("sellInput").value));
         if(glassesSold < Number(document.getElementById("sellInput").value)
-            && Number(document.getElementById("sellInput").value) <= 8) {
+            && Number(document.getElementById("sellInput").value) <= ls.getMaxToSell()) {
             notEnoughLemonade(glassesSold);
-        } else if (Number(document.getElementById("sellInput").value) > 8) {
+        } else if (Number(document.getElementById("sellInput").value) > ls.getMaxToSell()) {
             triedToSellToManyGlassesAtOnce(glassesSold);
         }
         document.getElementById("sellInput").value = "1";
@@ -329,7 +332,7 @@ function notEnoughLemonade(glassesSold) {
 }
 
 function triedToSellToManyGlassesAtOnce(glassesSold) {
-    message = "<h3>Cannot sell more than 8 glasses at once.<br>";
+    message = "<h3>Cannot sell more than" + ls.getMaxToSell() +  "glasses at once.<br>";
     message += glassesSold;
     message += " glasses sold.</h3>";
     message += "<button onClick=dismissSellError() class='dismissButton'>Okay</button>";
