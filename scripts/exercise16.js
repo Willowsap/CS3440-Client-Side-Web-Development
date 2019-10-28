@@ -12,6 +12,6 @@ function updateTime() {
         .innerHTML = hours + ":" 
             + minutePad + minutes + ":" 
             + secondPad + seconds;
-
+    console.log("updated time");
     setTimeout("updateTime();", 1000);
 }
