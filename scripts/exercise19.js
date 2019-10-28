@@ -91,16 +91,35 @@ class LemonadeStand {
      * Displays within given element with given id
      */
     showIngredients(id) {
-        let ingredientTable = "<table><caption>Ingredients</caption>";
+        // initialize table
+        let ingredientTable = document.createElement('table');
+
+        // add caption
+        let tableCaption = document.createElement('caption');
+        tableCaption.appendChild(document.createTextNode("Ingredients"));
+        ingredientTable.appendChild(tableCaption);
+
+        // add table content
         for (const ingredient in this.state.ingredients) {
-            ingredientTable += "<tr><td>";
-            ingredientTable += ingredient;
-            ingredientTable += "</td><td class='number'>";
-            ingredientTable += this.state.ingredients[ingredient];
-            ingredientTable += "</td></tr>"
+            let tableRow = document.createElement('tr');
+            let tableColumn1 = document.createElement('td');
+            let tableColumn2 = document.createElement('td');
+
+            tableColumn1.appendChild(document.createTextNode(ingredient));
+            tableColumn2.appendChild(document.createTextNode(this.state.ingredients[ingredient]));
+            tableColumn2.setAttribute("class", "number");
+
+            tableRow.appendChild(tableColumn1);
+            tableRow.appendChild(tableColumn2);
+            ingredientTable.appendChild(tableRow);
         }
-        ingredientTable += "</table>"
-        document.getElementById(id).innerHTML = ingredientTable;
+
+        // make the article, add the table, and put it in the body
+        let ingredientArticle = document.createElement('article');
+        ingredientArticle.setAttribute("id", "ingredients");
+        ingredientArticle.appendChild(ingredientTable);
+
+        document.body.appendChild(ingredientArticle);
     }
 
     /*
@@ -108,23 +127,24 @@ class LemonadeStand {
      * Displays within given element with given id
      */
     showAdmin(id) {
+        // create header 
+        let adminHeader = document.createElement('h1');
+        adminHeader.appendChild(document.createTextNode("Admin"));
+
+        // create admin info list
+        let adminList = document.createElement('ul');
+        for (const info in this.state.businessInfo) {
+            let adminItem = document.createElement('li');
+            adminItem.appendChild(document.createTextNode(info + ": " + this.state.businessInfo[info]));
+            adminList.appendChild(adminItem);
+        }
+        
         let adminArticle = document.createElement('article');
         adminArticle.setAttribute("id", "admin");
-        
+        adminArticle.appendChild(adminHeader);
+        adminArticle.appendChild(adminList);
 
-        /*
-        let adminSection = "<h1>Admin</h1>";
-        adminSection += "<ul>";
-        for (const info in this.state.businessInfo) {
-            adminSection += "<li>";
-            adminSection += info;
-            adminSection += ": ";
-            adminSection += this.state.businessInfo[info];
-            adminSection += "</li>";
-        }
-        adminSection += "</ul>";
-        document.getElementById(id).innerHTML = adminSection;
-        */
+        document.body.appendChild(adminArticle);
     }
 
     /*
@@ -209,11 +229,23 @@ class LemonadeStand {
     getMaxToSell() {return this.state.sellMoreMax;}
 }
 
-const ls = new LemonadeStand(15,3,4,20,1.5);
-reload();
-addEventListeners();
+/* Extra functions */
 
-function reload(errorCauser) {
-    ls.showIngredients("ingredients");
+function reload(ls) {
     ls.showAdmin("admin");
+    ls.showIngredients("ingredients");
 }
+
+/* Joel's test function */
+function test1() {
+    //The following code will execute when the JS file loads.
+    let ls = new LemonadeStand(15,3,4,20,1.5);
+    ls.makeLemonade();
+    ls.sellLemonade();
+    ls.sellMoreLemonade(8);
+    //call showAdmin and showIngredients. Note that you do not need arguments now.
+    reload(ls)
+}
+
+/* 'main' */
+test1();
