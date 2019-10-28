@@ -66,7 +66,7 @@ class LemonadeStand {
                 break;
             }
         }
-        return glassesSold();
+        return glassesSold;
     }
 
     showIngredients(id) {
@@ -199,11 +199,23 @@ class LemonadeStand {
     }
     
 }
+/* Extra functions */
 
-const ls = new LemonadeStand(15,3,4,20,1.5);
-reload();
-
-function reload() {
+function reload(ls) {
     ls.showIngredients("ingredients");
     ls.showAdmin("admin");
 }
+
+/* Joel's test function */
+function test1() {
+    //The following code will execute when the JS file loads.
+    let ls = new LemonadeStand(15,3,4,20,1.5);
+    ls.makeLemonade();
+    ls.sellLemonade();
+    ls.sellMoreLemonade(8);
+    //call showAdmin and showIngredients. Note that you do not need arguments now.
+    reload(ls)
+}
+
+/* 'main' */
+test1();
