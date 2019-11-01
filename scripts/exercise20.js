@@ -13,9 +13,9 @@ class LemonadeStand {
                 "Empty Glasses" : 0
             },
             businessInfo : {
+                "Price per Glass" : 0,
                 "Glasses of Lemonade" : 0,
-                "Income" : 0,
-                "Price" : 0
+                "Income" : 0
             },
             recipe : {
                 "Lemons" : 6,
@@ -95,9 +95,8 @@ class LemonadeStand {
         let ingredientTable = document.createElement('table');
 
         // add caption
-        let tableCaption = document.createElement('caption');
-        tableCaption.appendChild(document.createTextNode("Ingredients"));
-        ingredientTable.appendChild(tableCaption);
+        let tableCaption = document.createElement('h2');
+        tableCaption.appendChild(document.createTextNode("Inventory"));
 
         // add table content
         for (const ingredient in this.state.ingredients) {
@@ -117,6 +116,7 @@ class LemonadeStand {
         // make the article, add the table, and put it in the body
         let ingredientArticle = document.createElement('article');
         ingredientArticle.setAttribute("id", "ingredients");
+        ingredientArticle.appendChild(tableCaption);
         ingredientArticle.appendChild(ingredientTable);
 
         document.body.appendChild(ingredientArticle);
@@ -128,7 +128,7 @@ class LemonadeStand {
      */
     showAdmin(id) {
         // create header 
-        let adminHeader = document.createElement('h1');
+        let adminHeader = document.createElement('h2');
         adminHeader.appendChild(document.createTextNode("Admin"));
 
         // create admin info list
@@ -146,6 +146,11 @@ class LemonadeStand {
 
         document.body.appendChild(adminArticle);
     }
+
+    /* =========================================================
+     *      HELPER METHODS
+     * =========================================================
+     */
 
     /*
      * Updates the ingredients in the state.
@@ -214,7 +219,7 @@ class LemonadeStand {
     setCupsOfSugar(cupsOfSugar) {this.updateIngredients({"Cups of Sugar" : cupsOfSugar})}
     setEmptyGlasses(emptyGlasses) {this.updateIngredients({"Empty Glasses" : emptyGlasses})}
     setGlassesOfLemonade(glassesOfLemonade) {this.updateBusinessInfo({"Glasses of Lemonade" : glassesOfLemonade})}
-    setPrice(price) {this.updateBusinessInfo({"Price" : price})}
+    setPrice(price) {this.updateBusinessInfo({"Price per Glass" : price})}
     setIncome(income) {this.updateBusinessInfo({"Income" : income})}
 
     /* Accessor Methods */
@@ -223,29 +228,22 @@ class LemonadeStand {
     getCupsOfSugar() {return this.state.ingredients["Cups of Sugar"];}
     getEmptyGlasses() {return this.state.ingredients["Empty Glasses"];}
     getGlassesOfLemonade() {return this.state.businessInfo["Glasses of Lemonade"];}
-    getPrice() {return this.state.businessInfo["Price"];}
+    getPrice() {return this.state.businessInfo["Price per Glass"];}
     getIncome() {return this.state.businessInfo["Income"];}
     getRecipe() {return this.state.recipe;}
     getMaxToSell() {return this.state.sellMoreMax;}
 }
 
-/* Extra functions */
 
-function reload(ls) {
-    ls.showAdmin("admin");
-    ls.showIngredients("ingredients");
+/* =========================================================
+ *      TESTING SECTION
+ * =========================================================
+ */
+
+function test() {
+    let ls = new LemonadeStand(20,10,10,10, 2.0);
+    ls.showAdmin();  
+    ls.showIngredients();  
 }
 
-/* Joel's test function */
-function test1() {
-    //The following code will execute when the JS file loads.
-    let ls = new LemonadeStand(15,3,4,20,1.5);
-    ls.makeLemonade();
-    ls.sellLemonade();
-    ls.sellMoreLemonade(8);
-    //call showAdmin and showIngredients. Note that you do not need arguments now.
-    reload(ls)
-}
-
-/* 'main' */
-test1();
+test();
