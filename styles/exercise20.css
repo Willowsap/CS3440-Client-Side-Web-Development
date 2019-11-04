@@ -13,3 +13,16 @@ td {
     padding-left: 5px;
     padding-right: 5px;
 }
+
+.addIngredient {
+    width: 3em;
+}
+
+.clickable {
+    cursor: pointer;
+    text-decoration: underline;
+    color: blue;
+}
+img.plus {
+    cursor: pointer;
+}

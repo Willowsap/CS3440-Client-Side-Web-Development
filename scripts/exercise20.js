@@ -13,7 +13,7 @@ class LemonadeStand {
                 "Empty Glasses" : 0
             },
             businessInfo : {
-                "Price per Glass" : 0,
+                "Price per Glass" : 2.00,
                 "Glasses of Lemonade" : 0,
                 "Income" : 0
             },
@@ -135,7 +135,11 @@ class LemonadeStand {
         let adminList = document.createElement('ul');
         for (const info in this.state.businessInfo) {
             let adminItem = document.createElement('li');
-            adminItem.appendChild(document.createTextNode(info + ": " + this.state.businessInfo[info]));
+            let printedInfo = this.state.businessInfo[info];
+            if (info == "Price per Glass") {
+                printedInfo = "$" + parseFloat(Math.round(printedInfo * 100) / 100).toFixed(2); ;
+            }
+            adminItem.appendChild(document.createTextNode(info + ": " + printedInfo));
             adminList.appendChild(adminItem);
         }
         
@@ -240,10 +244,29 @@ class LemonadeStand {
  * =========================================================
  */
 
-function test() {
-    let ls = new LemonadeStand(20,10,10,10, 2.0);
-    ls.showAdmin();  
-    ls.showIngredients();  
+let ls = new LemonadeStand(20,10,10,10, 2.0);
+function initAdd() {
+    let hideAbles = document.querySelectorAll(".hide_me");
+    for (let hideAble of hideAbles) {
+        hideAble.addEventListener('click', showInput);
+    }
 }
-
-test();
+function init() {  	
+	ls.showAdmin(document.getElementById('admin'));  
+    ls.showIngredients(document.getElementById('ingredients'));  
+    initAdd();
+}
+function hideAll() {
+    let hideAbles = document.getElementsByClassName("hide_me");
+    for (let hideAble of hideAbles) {
+        hideAble.style.display = "none";
+    }
+}
+function showInput() {
+    hideAll();
+    this.style.display = "inline";
+    this.value ="";
+    this.focus();
+}
+init();
+hideAll();
