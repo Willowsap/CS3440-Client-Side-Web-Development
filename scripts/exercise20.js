@@ -249,6 +249,14 @@ function initAdd() {
     let hideAbles = document.querySelectorAll(".hide_me");
     for (let hideAble of hideAbles) {
         hideAble.addEventListener('click', showInput);
+        hideAble.addEventListener("keyup", (event)=>{addValue(event)});
+    }
+}
+function addValue(event) {
+    if (event.keyCode === 13 || event.keyCode === 10) {
+        console.log(event.target);
+        ls.setLemons(ls.getLemons += event.target.value);
+        ls.showIngredients();
     }
 }
 function init() {  	
