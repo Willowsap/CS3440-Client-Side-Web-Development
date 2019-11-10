@@ -30,11 +30,14 @@ section#controlSection {
     background-color: rgb(255, 246, 205);
     padding: 40px;
 }
-#addIngredients {
+article#addIngredients {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     justify-content: stretch;
+}
+article#addIngredients h2 {
+    text-align: center;
 }
 article {
     display: flex;
