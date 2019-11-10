@@ -43,10 +43,10 @@ class LemonadeStand {
             return 0;
         }
         this.updateIngredients({
-            "Lemons" : this.getLemons() - this.state.recipe["Lemons"],
-            "Gallons of Water" : this.getGallonsOfWater() - this.state.recipe["Gallons of Water"],
-            "Cups of Sugar" : this.getCupsOfSugar() - this.state.recipe["Cups of Sugar"],
-            "Empty Glasses" : this.getEmptyGlasses() - this.state.recipe["Empty Glasses"]
+            "Lemons" : -1 * this.state.recipe["Lemons"],
+            "Gallons of Water" : -1 * this.state.recipe["Gallons of Water"],
+            "Cups of Sugar" : -1 * this.state.recipe["Cups of Sugar"],
+            "Empty Glasses" : -1 * this.state.recipe["Empty Glasses"]
         })
         this.updateBusinessInfo({
             "Glasses of Lemonade" : this.getGlassesOfLemonade() + this.state.recipe["Glasses Produced"]
@@ -90,7 +90,7 @@ class LemonadeStand {
      * Displays a table of all the ingredients.
      * Displays within given element with given id
      */
-    showIngredients(id) {
+    showIngredients() {
         // initialize table
         let ingredientTable = document.createElement('table');
 
@@ -107,6 +107,7 @@ class LemonadeStand {
             tableColumn1.appendChild(document.createTextNode(ingredient));
             tableColumn2.appendChild(document.createTextNode(this.state.ingredients[ingredient]));
             tableColumn2.setAttribute("class", "number");
+            tableColumn2.setAttribute("id", ingredient);
 
             tableRow.appendChild(tableColumn1);
             tableRow.appendChild(tableColumn2);
@@ -119,14 +120,14 @@ class LemonadeStand {
         ingredientArticle.appendChild(tableCaption);
         ingredientArticle.appendChild(ingredientTable);
 
-        document.body.appendChild(ingredientArticle);
+        document.getElementById("infoSection").appendChild(ingredientArticle);
     }
 
     /*
      * Displays a list of admin info
      * Displays within given element with given id
      */
-    showAdmin(id) {
+    showAdmin() {
         // create header 
         let adminHeader = document.createElement('h2');
         adminHeader.appendChild(document.createTextNode("Admin"));
@@ -136,10 +137,11 @@ class LemonadeStand {
         for (const info in this.state.businessInfo) {
             let adminItem = document.createElement('li');
             let printedInfo = this.state.businessInfo[info];
-            if (info == "Price per Glass") {
-                printedInfo = "$" + parseFloat(Math.round(printedInfo * 100) / 100).toFixed(2); ;
+            if (info == "Price per Glass" || "Income") {
+                printedInfo = "$" + parseFloat(Math.round(printedInfo * 100) / 100).toFixed(2);
             }
             adminItem.appendChild(document.createTextNode(info + ": " + printedInfo));
+            adminItem.setAttribute('id', info);
             adminList.appendChild(adminItem);
         }
         
@@ -148,9 +150,33 @@ class LemonadeStand {
         adminArticle.appendChild(adminHeader);
         adminArticle.appendChild(adminList);
 
-        document.body.appendChild(adminArticle);
+        document.getElementById("infoSection").appendChild(adminArticle);
     }
 
+    /**
+     * Updates a particular ingredient's display
+     * @param {String} id 
+     */
+    updateInventory(id) {
+        let info = false;
+        if (this.state.ingredients.hasOwnProperty(id)) {
+            info = this.state.ingredients[id];
+        } else if (this.state.businessInfo.hasOwnProperty(id)) {
+            info = this.state.businessInfo[id];
+            if (id == "Price per Glass" || id == "Income") {
+                info = "$" + parseFloat(Math.round(
+                    info * 100) / 100).toFixed(2);
+            }
+            info = id + ": " + info;
+        }
+        if (info) {
+            document.getElementById(id).replaceChild(
+                document.createTextNode(info),
+                document.getElementById(id).firstChild,
+            );
+        }
+        
+    }
     /* =========================================================
      *      HELPER METHODS
      * =========================================================
@@ -162,11 +188,12 @@ class LemonadeStand {
      * { ingredientKey : quantity }
      * where ingredientKey must be one of the ingredients in the state
      */
-    updateIngredients(ingredients) {
+    updateIngredients(ingredients, replace) {
         for (const ingredient in ingredients) {
             if (this.state.ingredients.hasOwnProperty(ingredient)){
-                this.state.ingredients[ingredient] = ingredients[ingredient] < 0 
-                    ? 0 : ingredients[ingredient];
+                this.state.ingredients[ingredient] = replace
+                    ? ingredients[ingredient] < 0 ? 0 : ingredients[ingredient]
+                    : ingredients[ingredient] + this.state.ingredients[ingredient] < 0 ? 0 : ingredients[ingredient] + this.state.ingredients[ingredient];
             }
         }
     }
@@ -218,13 +245,13 @@ class LemonadeStand {
     }
 
     /* Mutator Methods */
-    setLemons(lemons) {this.updateIngredients({"Lemons" : lemons})}
-    setGallonsOfWater(gallonsOfWater) {this.updateIngredients({"Gallons of Water" : gallonsOfWater})}
-    setCupsOfSugar(cupsOfSugar) {this.updateIngredients({"Cups of Sugar" : cupsOfSugar})}
-    setEmptyGlasses(emptyGlasses) {this.updateIngredients({"Empty Glasses" : emptyGlasses})}
-    setGlassesOfLemonade(glassesOfLemonade) {this.updateBusinessInfo({"Glasses of Lemonade" : glassesOfLemonade})}
+    setLemons(lemons) {this.updateIngredients({"Lemons" : lemons}, true)}
+    setGallonsOfWater(gallonsOfWater) {this.updateIngredients({"Gallons of Water" : gallonsOfWater}, true)}
+    setCupsOfSugar(cupsOfSugar) {this.updateIngredients({"Cups of Sugar" : cupsOfSugar}, true)}
+    setEmptyGlasses(emptyGlasses) {this.updateIngredients({"Empty Glasses" : emptyGlasses}, true)}
+    setGlassesOfLemonade(glassesOfLemonade) {this.updateBusinessInfo({"Glasses of Lemonade" : glassesOfLemonade}, true)}
     setPrice(price) {this.updateBusinessInfo({"Price per Glass" : price})}
-    setIncome(income) {this.updateBusinessInfo({"Income" : income})}
+    setIncome(income) {this.updateBusinessInfo({"Income" : income}, true)}
 
     /* Accessor Methods */
     getLemons() {return this.state.ingredients["Lemons"];}
@@ -249,20 +276,57 @@ function initAdd() {
     let hideAbles = document.querySelectorAll(".hide_me");
     for (let hideAble of hideAbles) {
         hideAble.addEventListener('click', showInput);
-        hideAble.addEventListener("keyup", (event)=>{addValue(event)});
+        hideAble.addEventListener("keyup", addValue);
     }
 }
 function addValue(event) {
-    if (event.keyCode === 13 || event.keyCode === 10) {
-        console.log(event.target);
-        ls.setLemons(ls.getLemons += event.target.value);
-        ls.showIngredients();
+    if (event.keyCode == 13 || event.keyCode==10)
+    {
+        ls.updateIngredients({[event.target.name] : Number(event.target.value)});
+        ls.updateInventory(event.target.name);
+        hideAll();
+    }
+}
+function updateAll() {
+    for (const key in ls.state.ingredients) {
+        ls.updateInventory(key);
+    }
+    for (const key in ls.state.businessInfo) {
+        if (key != "Price per Glass") {
+            ls.updateInventory(key);
+        }
+    }
+}
+function initButtons() {
+    let buttons = document.querySelectorAll('button');
+    for (let i = 0; i < buttons.length; i++) {
+        if (buttons[i].id == "makeLemonade") {
+            buttons[i].addEventListener('click',function(){ls.makeLemonade(); updateAll();}, false);
+        } else if (buttons[i].id == "sellLemonade") {
+            buttons[i].addEventListener('click',function(){ls.sellLemonade(); updateAll();}, false);
+        }
+    }
+}
+function initSpans() {
+    let spans = document.querySelectorAll('span');
+    for (let ele of spans) 
+    {
+        ele.onmouseover = function() {
+            ele.previousElementSibling.src = '../images/plus_dark.png';
+            ele.style.color = "purple";
+        };
+        ele.onmouseout = function() {
+            ele.previousElementSibling.src = '../images/plus_light.png';
+            ele.style.color = "blue";
+        };     
     }
 }
 function init() {  	
-	ls.showAdmin(document.getElementById('admin'));  
-    ls.showIngredients(document.getElementById('ingredients'));  
+	ls.showAdmin();  
+    ls.showIngredients();  
     initAdd();
+    initButtons();
+    initSpans();
 }
 function hideAll() {
     let hideAbles = document.getElementsByClassName("hide_me");
@@ -276,5 +340,6 @@ function showInput() {
     this.value ="";
     this.focus();
 }
+
 init();
 hideAll();

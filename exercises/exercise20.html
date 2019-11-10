@@ -7,34 +7,46 @@
     <script defer src="../scripts/exercise20.js"></script>
 </head>
 <body>
-    <h1>The Worlds Best Bananaade</h1>
-    <article id="addIngredients">
-        <h2>Add Ingredients</h2>
-        <label for="numLemons">
-            <img src="../images/plus_light.png" class="plus">
-            <span class="clickable" id="addNumLemons">Add lemons</span>
-            <input value=0 id="numLemons" name="numLemons" type="number" class="addIngredient hide_me"></input><br>
-        </label>
-        <label for="gallonsOfWater">
-            <img src="../images/plus_light.png" class="plus">
-            <span class="clickable" id="addGallonsOfWater">Add gallons of water</span>
-            <input value=0 id="gallonsOfWater" name="gallonsOfWater" type="number" class="addIngredient hide_me"></input><br>
-        </label>
-        <label for="cupsOfSugar">
-            <img src="../images/plus_light.png" class="plus">
-            <span class="clickable" id="addCupsOfSugar">Add cups of sugar</span>
-            <input value=0 id="cupsOfSugar" name="cupsOfSugar" type="number" class="addIngredient hide_me"></input><br>
-        </label>
-        <label for="emptyGlasses">
-            <img src="../images/plus_light.png" class="plus">
-            <span class="clickable" id="addEmptyGlasses">Add empty glasses</span>
-            <input value=0 id="emptyGlasses" name="emptyGlasses" type="number" class="addIngredient hide_me"></input><br>
-        </label>
-    </article>
-    <article id="controls">
-        <h2>Controls</h2>
-        <button>Make Lemonade</button><br>
-        <button>Sell Lemonade</button>
-    </article>
+    <h1 id="pageTitle">The Worlds Best Bananaade</h1>
+    <div id="pageWrapper">
+    <section id="controlSection" class="mainSection">
+        <article id="addIngredients" class="adminSection">
+            <h2>Add Ingredients</h2>
+            <label for="numLemons" class="inputButton">
+                <img src="../images/plus_light.png" class="plus">
+                <span class="clickable" id="addNumLemons">Add lemons</span>
+                <input value=0 id="numLemons" name="Lemons" type="number" class="addIngredient hide_me"></input>
+            </label>
+            <label for="gallonsOfWater" class="inputButton">
+                <img src="../images/plus_light.png" class="plus">
+                <span class="clickable" id="addGallonsOfWater">Add gallons of water</span>
+                <input value=0 id="gallonsOfWater" name="Gallons of Water" type="number" class="addIngredient hide_me"></input>
+            </label>
+            <label for="cupsOfSugar" class="inputButton">
+                <img src="../images/plus_light.png" class="plus">
+                <span class="clickable" id="addCupsOfSugar">Add cups of sugar</span>
+                <input value=0 id="cupsOfSugar" name="Cups of Sugar" type="number" class="addIngredient hide_me"></input>
+            </label>
+            <label for="emptyGlasses" class="inputButton">
+                <img src="../images/plus_light.png" class="plus">
+                <span class="clickable" id="addEmptyGlasses">Add empty glasses</span>
+                <input value=0 id="emptyGlasses" name="Empty Glasses" type="number" class="addIngredient hide_me"></input>
+            </label>
+        </article>
+        <article id="controls" class="adminSection">
+            <h2>Controls</h2>
+            <button id="makeLemonade" class="control">Make Lemonade</button>
+            <button id="sellLemonade" class="control">Sell Lemonade</button>
+            <button id="sellMoreLemonade" class="control">
+                Sell
+                <input value=2 id="glassesToSell" name="Glasses to Sell" type="number" class="glassesToSell"></input>
+                Glasses
+            </button>
+        </article>
+    </section>
+    <section id="infoSection" class="mainSection">
+        <!-- Filled by Javascript -->
+    </section>
+    </div>
 </body>
 </html> 
