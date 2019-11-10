@@ -46,7 +46,7 @@ h1 {
     color: white;
     line-height: 90px;
     font-size: 60px;
-    font-family: fantasy;
+    font-family: Georgia, 'Times New Roman', Times, serif;
     font-weight: 900;
     margin-bottom: 0px;
     text-align: center;
@@ -54,7 +54,7 @@ h1 {
 article#admin ul li{
     line-height: 30px;
     font-size: 20px;
-    font-family: fantasy;
+    font-family: Georgia, 'Times New Roman', Times, serif;
     margin-top: 0px;
 }
 article#ingredients {
@@ -75,7 +75,7 @@ article#ingredients table tr td {
     border-left-width: 0em;
     border-right-width: 0em;
     font-size: 20px;
-    font-family: fantasy;
+    font-family: Georgia, 'Times New Roman', Times, serif;
     line-height: 40px;
     padding-right: 15px;
 }
@@ -85,13 +85,13 @@ article#ingredients table tr td.number {
 article#ingredients table caption {
     line-height: 50px;;
     font-size: 40px;
-    font-family: fantasy;
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 button {
     background-color: rgb(255, 162, 22);
     border: 0px;
     color: rgb(255, 246, 205);
-    font-family: fantasy;
+    font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 30px;
     line-height: 45px;
     padding: 10px;
@@ -110,7 +110,7 @@ button:hover {
     align-items: center;
     justify-content: center;
     min-height: 45px;
-    font-family: fantasy;
+    font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 20px;
     color: blue;
     margin: 2px;

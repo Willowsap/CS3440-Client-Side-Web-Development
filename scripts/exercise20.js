@@ -300,10 +300,28 @@ function updateAll() {
 function initButtons() {
     let buttons = document.querySelectorAll('button');
     for (let i = 0; i < buttons.length; i++) {
-        if (buttons[i].id == "makeLemonade") {
-            buttons[i].addEventListener('click',function(){ls.makeLemonade(); updateAll();}, false);
-        } else if (buttons[i].id == "sellLemonade") {
-            buttons[i].addEventListener('click',function(){ls.sellLemonade(); updateAll();}, false);
+    if (buttons[i].id == "makeLemonade") {
+            buttons[i].addEventListener('click',function(){
+                ls.makeLemonade(); 
+                updateAll();
+            }, false);
+        }
+        else if (buttons[i].id == "sellLemonade") {
+            buttons[i].addEventListener('click',function(){
+                ls.sellLemonade(); 
+                updateAll();
+            }, false);
+        }
+        else if (buttons[i].id == "sellMoreLemonade") {
+            buttons[i].addEventListener('click',function() {
+                if (event.srcElement.id != "glassesToSell") {
+                    ls.sellMoreLemonade(document.getElementById("glassesToSell").value); 
+                    updateAll();                    
+                }
+            }, false);
+            buttons[i].firstElementChild.addEventListener("keyup", function() {
+                if (event.keyCode == 13 || event.keyCode==10) buttons[i].click();
+            }) 
         }
     }
 }
