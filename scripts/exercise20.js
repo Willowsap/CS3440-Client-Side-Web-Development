@@ -1,10 +1,5 @@
 class LemonadeStand {
-    /*
-     * Constructs the lemonade stand.
-     * Initializes state.
-     */
     constructor(lemons, gallonsOfWater, cupsOfSugar, emptyGlasses, price) {
-        // initialize state
         this.state = {
             ingredients : {
                 "Lemons" : 0 ,
@@ -24,8 +19,8 @@ class LemonadeStand {
                 "Empty Glasses" : 8,
                 "Glasses Produced" : 8
             },
-            sellMoreMax : 12
-
+            sellMoreMax : 8,
+            pageTitle : "The Worlds Best Bananaade"
         };
         this.setLemons(lemons);
         this.setGallonsOfWater(gallonsOfWater);
@@ -33,11 +28,6 @@ class LemonadeStand {
         this.setEmptyGlasses(emptyGlasses);
         this.setPrice(price);
     }
-
-    /* 
-     * Makes on batch of lemonade.
-     * Recipe stored in state.
-     */
     makeLemonade() {
         if (this.insufficientIngredients()) {
             return 0;
@@ -53,11 +43,6 @@ class LemonadeStand {
         })
         return this.state.sellMoreMax;
     }
-
-    /*
-     * Sells one glass of lemonade.
-     * Returns 1 if the glass is sold.
-     */
     sellLemonade() {
         if (!this.getGlassesOfLemonade() && !this.makeLemonade()) {
             return 0;
@@ -68,13 +53,6 @@ class LemonadeStand {
         });
         return 1;
     }
-
-    /*
-     * Sells a specified number of glasses of lemonade.
-     * Returns the number of glasses sold.
-     * Will not sell more than the max allowed as specified in the state
-     * Will sell as many as possible when the number is too high.
-     */
     sellMoreLemonade(amount) {
         amount = amount > this.state.sellMoreMax ? this.state.sellMoreMax : amount;
         let glassesSold = 0;
@@ -85,20 +63,12 @@ class LemonadeStand {
         }
         return glassesSold;
     }
-
-    /*
-     * Displays a table of all the ingredients.
-     * Displays within given element with given id
-     */
     showIngredients() {
-        // initialize table
         let ingredientTable = document.createElement('table');
 
-        // add caption
         let tableCaption = document.createElement('h2');
         tableCaption.appendChild(document.createTextNode("Inventory"));
 
-        // add table content
         for (const ingredient in this.state.ingredients) {
             let tableRow = document.createElement('tr');
             let tableColumn1 = document.createElement('td');
@@ -113,81 +83,237 @@ class LemonadeStand {
             tableRow.appendChild(tableColumn2);
             ingredientTable.appendChild(tableRow);
         }
-
-        // make the article, add the table, and put it in the body
         let ingredientArticle = document.createElement('article');
         ingredientArticle.setAttribute("id", "ingredients");
         ingredientArticle.appendChild(tableCaption);
         ingredientArticle.appendChild(ingredientTable);
 
-        document.getElementById("infoSection").appendChild(ingredientArticle);
+        return ingredientArticle;
     }
-
-    /*
-     * Displays a list of admin info
-     * Displays within given element with given id
-     */
     showAdmin() {
-        // create header 
         let adminHeader = document.createElement('h2');
         adminHeader.appendChild(document.createTextNode("Admin"));
 
-        // create admin info list
         let adminList = document.createElement('ul');
+        let _this = this;
         for (const info in this.state.businessInfo) {
             let adminItem = document.createElement('li');
-            let printedInfo = this.state.businessInfo[info];
-            if (info == "Price per Glass" || "Income") {
-                printedInfo = "$" + parseFloat(Math.round(printedInfo * 100) / 100).toFixed(2);
+            let inputItem = document.createElement('input');
+            let text1 = info + ": ";
+            if (info == "Price per Glass" || info == "Income") {
+                text1 += "$"
             }
-            adminItem.appendChild(document.createTextNode(info + ": " + printedInfo));
-            adminItem.setAttribute('id', info);
+            inputItem.setAttribute('type', 'number');
+            inputItem.setAttribute('id', info + 'input');
+            inputItem.setAttribute('name', info);
+            inputItem.setAttribute('class', 'adminInput');
+            if (info == "Price per Glass" || info == "Income")
+                inputItem.setAttribute('value', parseFloat(Math.round(this.state.businessInfo[info] * 100) / 100).toFixed(2));
+            else 
+                inputItem.setAttribute('value', this.state.businessInfo[info]);
+            if (info != "Price per Glass") {
+                inputItem.setAttribute('disabled', 'true');
+            } else {
+                inputItem.setAttribute('min', 0.00);
+                inputItem.setAttribute('step', 0.01);
+                inputItem.onchange = function() {
+                    this.value = parseFloat(Math.round(this.value * 100) / 100).toFixed(2);
+                    _this.updateBusinessInfo({[event.target.name] : Number(event.target.value)});
+                    _this.updateAll();
+                }
+            }
+            adminItem.appendChild(document.createTextNode(text1));
+            adminItem.appendChild(inputItem);
             adminList.appendChild(adminItem);
         }
-        
         let adminArticle = document.createElement('article');
         adminArticle.setAttribute("id", "admin");
         adminArticle.appendChild(adminHeader);
         adminArticle.appendChild(adminList);
 
-        document.getElementById("infoSection").appendChild(adminArticle);
+        return adminArticle;
     }
+    showIngredientAdding() {
+        let ingredientAddingTitle = document.createElement('h2');
+        ingredientAddingTitle.appendChild(document.createTextNode("Add Ingredients"));
 
-    /**
-     * Updates a particular ingredient's display
-     * @param {String} id 
-     */
-    updateInventory(id) {
-        let info = false;
-        if (this.state.ingredients.hasOwnProperty(id)) {
-            info = this.state.ingredients[id];
-        } else if (this.state.businessInfo.hasOwnProperty(id)) {
-            info = this.state.businessInfo[id];
-            if (id == "Price per Glass" || id == "Income") {
-                info = "$" + parseFloat(Math.round(
-                    info * 100) / 100).toFixed(2);
+        let ingredientAddingArticle = document.createElement('article');
+        ingredientAddingArticle.appendChild(ingredientAddingTitle);ingredientAddingArticle.setAttribute('id', 'addIngredients');
+        ingredientAddingArticle.setAttribute('class', 'adminSection');
+
+        let _this = this;
+        for(const ingredient in this.state.ingredients) {
+            let label = document.createElement('label');
+            label.setAttribute('for', ingredient + "input");
+            label.setAttribute('class', 'inputButton')
+
+            let image = document.createElement('img');
+            image.src = "../images/plus_light.png";
+            image.setAttribute('class', 'plus');
+
+            let span = document.createElement('span');
+            span.setAttribute('class', 'clickable');
+            span.setAttribute('id', "add" + ingredient);
+            span.onmouseover = function() {
+                span.previousElementSibling.src = '../images/plus_dark.png';
+                span.style.color = "purple";
+            };
+            span.onmouseout = function() {
+                span.previousElementSibling.src = '../images/plus_light.png';
+                span.style.color = "blue";
             }
-            info = id + ": " + info;
+            span.appendChild(document.createTextNode("Add " + ingredient));
+
+            let input = document.createElement('input');
+            input.setAttribute('type', 'number');
+            input.setAttribute('name', ingredient);
+            input.setAttribute('id', ingredient + "input");
+            input.setAttribute('value', 0);
+            input.setAttribute('min', 0);
+            input.setAttribute('class', 'addIngredient hide_me');
+            input.onclick = function() {
+                _this.hideAll();
+                this.style.display = "inline";
+                this.value ="";
+                this.focus();
+            }
+            input.onkeyup = function() {
+                if (event.keyCode == 13 || event.keyCode==10)
+                {
+                    _this.updateIngredients({[event.target.name] : Number(event.target.value)});
+                    _this.updateInventory(event.target.name);
+                    _this.hideAll();
+                }
+            }
+
+            label.appendChild(image);
+            label.appendChild(span);
+            label.appendChild(input);
+            ingredientAddingArticle.appendChild(label);
         }
-        if (info) {
-            document.getElementById(id).replaceChild(
-                document.createTextNode(info),
-                document.getElementById(id).firstChild,
-            );
+        return ingredientAddingArticle;
+    }
+    showOperations() {
+        let _this = this;
+        let operationsTitle = document.createElement('h2');
+        operationsTitle.appendChild(document.createTextNode('Controls'));
+
+        let operationsArticle = document.createElement('article');
+        operationsArticle.setAttribute('id', 'controls');
+        operationsArticle.setAttribute('class', 'adminSection');
+        operationsArticle.appendChild(operationsTitle);
+
+        let makeLemonade = document.createElement('div');
+        makeLemonade.setAttribute('class', 'control');
+        makeLemonade.setAttribute('id', 'makeLemonade');
+        makeLemonade.onclick = function() {
+            _this.makeLemonade();
+            _this.updateAll();
         }
+        makeLemonade.appendChild(document.createTextNode('Make Lemonade'));
         
+        let sellLemonade = document.createElement('div');
+        sellLemonade.setAttribute('class', 'control');
+        sellLemonade.setAttribute('id', 'sellLemonade');
+        sellLemonade.onclick = function() {
+            _this.sellLemonade();
+            _this.updateAll();
+        }
+        sellLemonade.appendChild(document.createTextNode('Sell Lemonade'));
+
+        let sellMoreLemonade = document.createElement('div');
+        sellMoreLemonade.setAttribute('class', 'control');
+        sellMoreLemonade.setAttribute('id', 'sellMoreLemonade');
+        sellMoreLemonade.onclick = function() {
+            if (event.srcElement.id != "glassesToSell") {
+                _this.sellMoreLemonade(document.getElementById("glassesToSell").value); 
+                _this.updateAll();                    
+            }
+        };
+        sellMoreLemonade.appendChild(document.createTextNode('Sell'));
+
+        let input = document.createElement('input');
+        input.setAttribute('id', 'glassesToSell');
+        input.setAttribute('name', 'Glasses to Sell');
+        input.setAttribute('value', 2);
+        input.setAttribute('type', 'number');
+        input.setAttribute('class', 'glassesToSell');
+        input.setAttribute('min', 2);
+        input.setAttribute('max', this.state.sellMoreMax);
+        input.onkeyup = function() {
+            if (event.keyCode == 13 || event.keyCode==10) sellMoreLemonade.click();
+        };
+        sellMoreLemonade.appendChild(input);
+        sellMoreLemonade.appendChild(document.createTextNode('Glasses'));
+
+        operationsArticle.appendChild(makeLemonade);
+        operationsArticle.appendChild(sellLemonade);
+        operationsArticle.appendChild(sellMoreLemonade);
+        return operationsArticle;
+    }
+    load() {
+        let title = document.createElement('h1');
+        title.setAttribute('id', 'pageTitle');
+        title.appendChild(document.createTextNode(this.state.pageTitle));
+
+        let pageWrapper = document.createElement('div');
+        pageWrapper.setAttribute('id', 'pageWrapper');
+
+        let controlSection = document.createElement('section');
+        controlSection.setAttribute('id', 'controlSection');
+        controlSection.setAttribute('class', 'mainSection');
+        controlSection.appendChild(this.showIngredientAdding());
+        controlSection.appendChild(this.showOperations());
+
+        let infoSection = document.createElement('section');
+        infoSection.setAttribute('id', 'infoSection');
+        infoSection.setAttribute('class', 'mainSection');
+        infoSection.appendChild(this.showAdmin());
+        infoSection.appendChild(this.showIngredients());
+
+        pageWrapper.appendChild(controlSection);
+        pageWrapper.appendChild(infoSection);
+
+        document.body.appendChild(title);
+        document.body.appendChild(pageWrapper);
+    }
+    updateInventory(id) {
+        if (this.state.ingredients.hasOwnProperty(id))
+            this.updateIngredientDisplay(id)
+        else if (this.state.businessInfo.hasOwnProperty(id))
+            this.updateBusinessDisplay(id);
+    }
+    updateIngredientDisplay(id) {
+        document.getElementById(id).replaceChild(
+            document.createTextNode(this.state.ingredients[id]),
+            document.getElementById(id).firstChild,
+        );
+    }
+    updateBusinessDisplay(id) {
+        let info = this.state.businessInfo[id];
+        if (id == "Price per Glass" || id == "Income")
+            info = parseFloat(Math.round(info * 100) / 100).toFixed(2)
+        document.getElementById(id + "input").value = info;
+    }
+    hideAll() {
+        let hideAbles = document.getElementsByClassName("hide_me");
+        for (let hideAble of hideAbles) {
+            hideAble.style.display = "none";
+        }
     }
     /* =========================================================
      *      HELPER METHODS
-     * =========================================================
-     */
-
-    /*
-     * Updates the ingredients in the state.
-     * parameter should be an object in the form
-     * { ingredientKey : quantity }
-     * where ingredientKey must be one of the ingredients in the state
-     */
+     * ========================================================= */
+    updateAll() {
+        for (const key in this.state.ingredients) {
+            this.updateInventory(key);
+        }
+        for (const key in this.state.businessInfo) {
+            if (key != "Price per Glass") {
+                this.updateInventory(key);
+            }
+        }
+    }
     updateIngredients(ingredients, replace) {
         for (const ingredient in ingredients) {
             if (this.state.ingredients.hasOwnProperty(ingredient)){
@@ -197,13 +323,6 @@ class LemonadeStand {
             }
         }
     }
-
-    /*
-     * Updates the admin info in the state.
-     * parameter should be an object in the form
-     * { infoKey : quantity }
-     * where infoKey must be one of the keys in businessInfo in the state
-     */
     updateBusinessInfo(businessInfo) {
         for (const info in businessInfo) {
             if (this.state.businessInfo.hasOwnProperty(info)){
@@ -212,11 +331,6 @@ class LemonadeStand {
             }
         }
     }
-
-    /*
-     * Returns true if there are not enough ingredients
-     * to make a batch of lemonade.
-     */
     insufficientIngredients() {
         if (this.state.ingredients["Lemons"] < this.state.recipe["Lemons"] ||
             this.state.ingredients["Gallons of Water"] < this.state.recipe["Gallons of Water"] ||
@@ -226,12 +340,6 @@ class LemonadeStand {
         }
         return false;
     }
-
-    /*
-     * Returns an object with each of the ingredients that do not have enough.
-     * Returned object in the form:
-     * { ingredient : requiredAmount }
-     */
     ingredientsNeeded() {
         let ingredients = {};
         let required = 0;
@@ -243,7 +351,6 @@ class LemonadeStand {
         }
         return ingredients;
     }
-
     /* Mutator Methods */
     setLemons(lemons) {this.updateIngredients({"Lemons" : lemons}, true)}
     setGallonsOfWater(gallonsOfWater) {this.updateIngredients({"Gallons of Water" : gallonsOfWater}, true)}
@@ -252,7 +359,6 @@ class LemonadeStand {
     setGlassesOfLemonade(glassesOfLemonade) {this.updateBusinessInfo({"Glasses of Lemonade" : glassesOfLemonade}, true)}
     setPrice(price) {this.updateBusinessInfo({"Price per Glass" : price})}
     setIncome(income) {this.updateBusinessInfo({"Income" : income}, true)}
-
     /* Accessor Methods */
     getLemons() {return this.state.ingredients["Lemons"];}
     getGallonsOfWater() {return this.state.ingredients["Gallons of Water"];}
@@ -272,92 +378,4 @@ class LemonadeStand {
  */
 
 let ls = new LemonadeStand(20,10,10,10, 2.0);
-function initAdd() {
-    let hideAbles = document.querySelectorAll(".hide_me");
-    for (let hideAble of hideAbles) {
-        hideAble.addEventListener('click', showInput);
-        hideAble.addEventListener("keyup", addValue);
-    }
-}
-function addValue(event) {
-    if (event.keyCode == 13 || event.keyCode==10)
-    {
-        ls.updateIngredients({[event.target.name] : Number(event.target.value)});
-        ls.updateInventory(event.target.name);
-        hideAll();
-    }
-}
-function updateAll() {
-    for (const key in ls.state.ingredients) {
-        ls.updateInventory(key);
-    }
-    for (const key in ls.state.businessInfo) {
-        if (key != "Price per Glass") {
-            ls.updateInventory(key);
-        }
-    }
-}
-function initButtons() {
-    let buttons = document.querySelectorAll('button');
-    for (let i = 0; i < buttons.length; i++) {
-    if (buttons[i].id == "makeLemonade") {
-            buttons[i].addEventListener('click',function(){
-                ls.makeLemonade(); 
-                updateAll();
-            }, false);
-        }
-        else if (buttons[i].id == "sellLemonade") {
-            buttons[i].addEventListener('click',function(){
-                ls.sellLemonade(); 
-                updateAll();
-            }, false);
-        }
-        else if (buttons[i].id == "sellMoreLemonade") {
-            buttons[i].addEventListener('click',function() {
-                if (event.srcElement.id != "glassesToSell") {
-                    ls.sellMoreLemonade(document.getElementById("glassesToSell").value); 
-                    updateAll();                    
-                }
-            }, false);
-            buttons[i].firstElementChild.addEventListener("keyup", function() {
-                if (event.keyCode == 13 || event.keyCode==10) buttons[i].click();
-            }) 
-        }
-    }
-}
-function initSpans() {
-    let spans = document.querySelectorAll('span');
-    for (let ele of spans) 
-    {
-        ele.onmouseover = function() {
-            ele.previousElementSibling.src = '../images/plus_dark.png';
-            ele.style.color = "purple";
-        };
-        ele.onmouseout = function() {
-            ele.previousElementSibling.src = '../images/plus_light.png';
-            ele.style.color = "blue";
-        };     
-    }
-}
-function init() {  	
-	ls.showAdmin();  
-    ls.showIngredients();  
-    initAdd();
-    initButtons();
-    initSpans();
-}
-function hideAll() {
-    let hideAbles = document.getElementsByClassName("hide_me");
-    for (let hideAble of hideAbles) {
-        hideAble.style.display = "none";
-    }
-}
-function showInput() {
-    hideAll();
-    this.style.display = "inline";
-    this.value ="";
-    this.focus();
-}
-
-init();
-hideAll();
+ls.load();

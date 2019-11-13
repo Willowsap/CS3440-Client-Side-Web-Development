@@ -54,6 +54,9 @@ h1 {
     margin-bottom: 0px;
     text-align: center;
 }
+article#admin ul {
+    align-self: flex-start;
+}
 article#admin ul li{
     line-height: 30px;
     font-size: 20px;
@@ -90,7 +93,7 @@ article#ingredients table caption {
     font-size: 40px;
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
-button {
+button, .control {
     background-color: rgb(255, 162, 22);
     border: 0px;
     color: rgb(255, 246, 205);
@@ -101,7 +104,7 @@ button {
     width: 100%;
     margin: 10px;
 }
-button:hover {
+button:hover, .control:hover {
     background-color: rgb(255, 246, 205);
     color: rgb(255, 162, 22);
     cursor: pointer;
@@ -118,6 +121,10 @@ button:hover {
     color: blue;
     margin: 2px;
     padding-left: 5px;
+    cursor: pointer;
+}
+.inputButton:hover {
+    background-color: rgb(255, 246, 205);
     cursor: pointer;
 }
 .inputButton span {
@@ -146,6 +153,13 @@ input.addIngredient {
     border-bottom-width: 1px;
     border-bottom-color: black;
     align-self: flex-end;
+}
+.hide_me {
+    display: none;
+}
+.adminInput {
+    width: 50px;
+    text-align: left;
 }
 input#glassesToSell {
     width: 30px;

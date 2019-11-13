@@ -25,7 +25,6 @@ class LemonadeStand {
                 "Glasses Produced" : 8
             },
             sellMoreMax : 12
-
         };
         this.setLemons(lemons);
         this.setGallonsOfWater(gallonsOfWater);
