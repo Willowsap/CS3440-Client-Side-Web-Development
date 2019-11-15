@@ -1,0 +1,113 @@
+body {
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    margin: 0px;
+}
+#contentWrapper {
+    background-color: black;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    margin: 0px;
+}
+#topbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: violet;
+}
+#topbar h1 {
+    color: white;
+    font-size: 40px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: 900;
+    margin: 0px;
+    text-align: center;
+    padding: 8px;
+}
+#topTabs {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    list-style: none;
+    margin: 0px;
+}
+.tabButton {
+    background-color: transparent;
+    color: black;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 18px;
+    border: 0px;
+    outline: none;
+    cursor: pointer;
+    padding: 10px;
+    border-right-color: black;
+    border-right-width: 2px;
+    border-right-style: solid;
+}
+.tabButton:hover {
+    background-color: black;
+    color: violet;
+}
+.mainArticle {
+    display: none;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    min-width: 900px;
+}
+.infoTable {
+    color: white;
+    border-color: white;
+    border-style: solid;
+    border-width: 2px;
+    border-spacing: 0px;
+    margin-top: 10px;
+    flex: 0.7;
+    padding: 0px;
+    margin: 0px;    
+    min-height: 300px;
+}
+.infoTable tr td, .infoTable tr th {
+    color: white;
+    border-left-color: white;
+    border-left-style: solid;
+    border-left-width: 2px;
+    text-align: center;
+}
+.searchBar {
+    display: flex;
+    flex: 0.3;
+    flex-direction: row;
+    align-items: stretch;
+    flex-direction: stretch;
+    min-height: 300px;
+    overflow: auto;
+}
+#buttonSearchSection {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+}
+#listSearchSection{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+}
+.dropDownList {
+    display: none;
+    color: white;
+}
+
