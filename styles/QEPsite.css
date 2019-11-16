@@ -1,96 +1,160 @@
 body {
-    background-color: black;
+    background-color: white;
+    color: black;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
     margin: 0px;
-}
-#contentWrapper {
-    background-color: black;
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    justify-content: center;
-    margin: 0px;
+    margin-bottom: 10%;
+    min-height: 800px;
 }
 #topbar {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    background-color: violet;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    border-top-width: 4px;
+    border-top-color: #f4c20a;
+    border-top-style: solid;
+    padding: 0px;
+    margin: 0px;
 }
-#topbar h1 {
-    color: white;
-    font-size: 40px;
+#titleSection {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    flex: 0.8;
+    padding-left: 10%;
+    padding-bottom: 2%;
+    cursor: pointer;
+}
+#titleSection h1 {
+    display: flex;
+    color: black;
+    font-size: 36px;
     font-family: Georgia, 'Times New Roman', Times, serif;
-    font-weight: 900;
+    font-weight: 400;
+    margin: 0px;
+    text-align: center;
+    padding: 8px;
+}
+#titleSection h2 {
+    display: flex;
+    color: black;
+    font-size: 26px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: 400;
     margin: 0px;
     text-align: center;
     padding: 8px;
 }
 #topTabs {
     display: flex;
+    flex: 1;
     flex-direction: row;
     align-items: stretch;
     justify-content: center;
     list-style: none;
     margin: 0px;
+    background-image: linear-gradient(#333333,#282828);
 }
 .tabButton {
     background-color: transparent;
-    color: black;
+    color: white;
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 18px;
+    font-weight: 400;
     border: 0px;
     outline: none;
     cursor: pointer;
     padding: 10px;
-    border-right-color: black;
-    border-right-width: 2px;
+    border-right-color: white;
+    border-right-width: 0.5px;
     border-right-style: solid;
 }
 .tabButton:hover {
-    background-color: black;
-    color: violet;
+    background-color: #666666;
+}
+#pageBlockHeader {
+    background-color: #f4c20a;
+    align-self: center;
+    height: 40px;
+    width: 80%;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+#contentWrapper {
+    background-color: inherit;
+    display: flex;
+    width: 80%;
+    align-self: center;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    margin: 0px;
 }
 .mainArticle {
     display: none;
     flex: 1;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     width: 80%;
     min-width: 900px;
 }
+#home {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-between;
+}
+#homeImg {
+    flex: .7;
+    max-width: 70%;
+    height: auto;
+}
+#pdfSection {
+    margin-top: 5%;
+    flex: .3;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
 .infoTable {
-    color: white;
-    border-color: white;
-    border-style: solid;
-    border-width: 2px;
     border-spacing: 0px;
     margin-top: 10px;
-    flex: 0.7;
+    flex: 1;
     padding: 0px;
-    margin: 0px;    
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: 0px;
+    margin-left: 2%;
     min-height: 300px;
 }
 .infoTable tr td, .infoTable tr th {
-    color: white;
-    border-left-color: white;
-    border-left-style: solid;
-    border-left-width: 2px;
-    text-align: center;
+    /*border-left-style: dashed;*/
+    /*border-left-width: 1px;*/
+    text-align: left;
+    padding: 5px;
+    height: 40px;
 }
+.infoTable tr:nth-child(even) {
+    background: #e3e3e3;
+}
+.infoTable tr:nth-child(odd) {
+    background: #FFF;
+}
+
 .searchBar {
     display: flex;
-    flex: 0.3;
+    flex: 0.4;
     flex-direction: row;
     align-items: stretch;
     flex-direction: stretch;
     min-height: 300px;
     overflow: auto;
+    max-width: 400px;
 }
 #buttonSearchSection {
     display: flex;
@@ -108,6 +172,82 @@ body {
 }
 .dropDownList {
     display: none;
-    color: white;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3%;
+    padding-left: 4%;
+    padding-bottom: 4%;
+    list-style: none;
+    background-color: #e3e3e3;
 }
-
+.dropDownList li {
+    cursor: pointer;
+    padding-top: 2%;
+    margin-top: 2%
+}
+.dropDownList li:hover {
+    font-weight: 900;
+}
+.dropDownButton {
+    outline: none;
+    border: none;
+    margin-top: 3%;
+    padding-left: 1%;
+    padding-right: 1%;
+    padding-bottom: 4%;
+    padding-top: 4%;
+    font-size: 18px;
+    background-image: url("../images/button2.png");
+    background-size: stretch;
+    background-repeat: none;
+    cursor: pointer;
+}
+#footer {
+    position: fixed;
+    bottom: 0px;
+    left: 10%;
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-top-color: #f4c20a;
+    border-top-style: solid;
+    border-top-width: 2px;
+    font-size: 95%;
+    padding-bottom: 1%;
+}
+#footerLeftWrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items:flex-start;
+    justify-content: flex-start;
+}
+#footerRightWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items:flex-start;
+    justify-content: flex-start;
+}
+#footerLinkList {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    padding: 0px;
+}
+#footerLinkList li {
+    padding-right: 14px;
+}
+#footerLinkList li a {
+    color: #15769a;
+    text-decoration: none;
+}
+#footerLinkList li a:hover {
+    text-decoration: underline;
+}
+#footerRightWrapper img {
+    padding: 20px;
+}
