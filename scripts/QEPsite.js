@@ -91,7 +91,14 @@ class Table {
             for (let key in reqs) {
                 for (let j = 0; j < this.state.rowData[i].length; j++) {
                     if (key == this.state.headerData[j]) {
-                        if (reqs[key] != this.state.rowData[i][j]) {
+                        if (key == "Proficiency") {
+                            if ((reqs[key] == "Med" && this.state.rowData[i][j] == "Low")
+                                || (reqs[key] == "High" && this.state.rowData[i][j] != "High")) {
+                                failsTest = true;
+                                break rowLoop;
+                            }
+                        }
+                        else if (reqs[key] != this.state.rowData[i][j]) {
                             failsTest = true;
                             break rowLoop;
                         }
