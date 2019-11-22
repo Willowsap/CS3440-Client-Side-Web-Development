@@ -101,7 +101,6 @@ body {
     align-items: flex-start;
     justify-content: center;
     width: 80%;
-    min-width: 900px;
 }
 #home {
     display: flex;
@@ -121,50 +120,53 @@ body {
     flex-direction: column;
     align-items: flex-start;
 }
+.tableWrapper {
+    width: 80%;
+}
 .infoTable {
     border-spacing: 0px;
-    margin-top: 10px;
-    flex: 1;
     padding: 0px;
-    margin-top: 0px;
+    margin-top: 10px;
     margin-bottom: 0px;
     margin-right: 0px;
     margin-left: 2%;
-    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: stretch;
+}
+.infoTable tr {
+    display: none;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
 }
 .infoTable tr td, .infoTable tr th {
-    /*border-left-style: dashed;*/
-    /*border-left-width: 1px;*/
+    flex: 1;
     text-align: left;
     padding: 5px;
-    height: 40px;
+    overflow: auto;
 }
-.infoTable tr:nth-child(even) {
-    background: #e3e3e3;
+.searchBarWrapper {
+    width: 20%;
 }
-.infoTable tr:nth-child(odd) {
-    background: #FFF;
-}
-
 .searchBar {
     display: flex;
-    flex: 0.4;
     flex-direction: row;
     align-items: stretch;
     min-height: 300px;
     overflow: auto;
-    max-width: 400px;
 }
-#buttonSearchSection {
+.buttonSearchSection {
     display: flex;
-    flex: 1;
+    width: 50%;
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
 }
-#listSearchSection{
+.listSearchSection{
     display: flex;
-    flex: 1;
+    width: 50%;    
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
@@ -180,13 +182,19 @@ body {
     list-style: none;
     background-color: #e3e3e3;
 }
-.dropDownList li {
+.searchButton {
     cursor: pointer;
     padding-top: 2%;
     margin-top: 2%
 }
-.dropDownList li:hover {
-    font-weight: 900;
+.deselectedButton {
+    font-weight: normal;
+}
+.deselectedButton:hover {
+    font-weight: bold;
+}
+.selectedButton {
+    font-weight: bold;
 }
 .dropDownButton {
     outline: none;
@@ -199,6 +207,7 @@ body {
     font-size: 18px;
     background-color: #f4c20a;
     cursor: pointer;
+    overflow: auto;
 }
 #footer {
     position: fixed;

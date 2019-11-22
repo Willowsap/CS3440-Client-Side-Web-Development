@@ -1,339 +1,233 @@
-const colleges = {
-    Health: "Beaver College of Health Sciences",
-    Science: "College of Arts and Sciences",
-    Arts: "College of Fine and Applied Arts",
-    Music: "Hayes School of Music",
-    Education: "Reich College of Education",
-    Business: "Walker College of Business",
-    Honors: "Honors College"
-};
-const departments = {
-    ANT: {Name: "Anthropology", College: colleges["Science"]},
-    ART: {Name: "Art", College: colleges["Arts"]},
-    BIO: {Name: "Biology", College: colleges["Science"]},
-    BUS: {Name: "Business", College: colleges["Business"]},
-    CJ : {Name: "Criminal Justica", College: colleges["Science"]},
-    COM: {Name: "Communication", College: colleges["Arts"]},
-    ENG: {Name: "English", College: colleges["Science"]},
-    FER: {Name: "Fermentation Sciences", College: colleges["Science"]},
-    FIN: {Name: "Finance", College: colleges["Business"]},
-    GER: {Name: "German", College: colleges["Science"]},
-    GHY: {Name: "Geography", College: colleges["Science"]},
-    GLY: {Name: "Geology", College: colleges["Science"]},
-    HIS: {Name: "History", College: colleges["Science"]},
-    HON: {Name: "Honors", College: colleges["Honors"]},
-    HOS: {Name: "Hospitality and Tourism Management", College: colleges["Business"]},
-    HPC: {Name: "Human Development and Psychological Counselling", College: colleges["Education"]},
-    HPE: {Name: "Health and Physical Education", College: colleges["Health"]},
-    IND: {Name: "Industrial Design", College: colleges["Arts"]},
-    INT: {Name: "Interior Design", College: colleges["Arts"]},
-    ITC: {Name: "Instructional Technology", College: colleges["Education"]},
-    LES: {Name: "Leadership and Educational Studies", College: colleges["Education"]},
-    LLC: {Name: "Languages, Literatures, and Cultures", College: colleges["Science"]},
-    MAT: {Name: "Mathematical Sciences", College: colleges["Science"]},
-    MBA: {Name: "Business Administration", College: colleges["Business"]},
-    MKT: {Name: "Marketing", College: colleges["Business"]},
-    MUS: {Name: "Music", College: colleges["Music"]},
-    PHL: {Name: "Philosophy", College: colleges["Science"]},
-    PSY: {Name: "Psychology", College: colleges["Science"]},
-    REL: {Name: "Religion", College: colleges["Science"]},
-    RM:  {Name: "Recreation Management", College: colleges["Health"]},
-    SAA: {Name: "Student Affairs Administration", College: colleges["Education"]},
-    SCM: {Name: "Supply Chain Management", College: colleges["Business"]},
-    SD:  {Name: "Sustainable Development", College: colleges["Arts"]},
-    SNH: {Name: "Spanish", College: colleges["Science"]},
-    SOC: {Name: "Sociology", College: colleges["Science"]},
-    STBE:{Name: "Sustainable Technology and the Built Enviornment", College: colleges["Arts"]},
-    SW:  {Name: "Social Work", College: colleges["Health"]},
-    THR: {Name: "Theater", College: colleges["Arts"]},
-    WRC: {Name: "Watauga Residential College", College: colleges["Honors"]}
-};
-const terms = {
-    "Spring": "Spring 2020",
-    "Summer I": "Summer I 2020",
-    "Summer II": "Summer II 2020",
-    "Fall": "Fall 2020"
-};
-const countries = {
-    AU: "Australia",
-    AT: "Austria",
-    BE: "Belgium",
-    BZ: "Belize",
-    BM: "Bermuda",
-    BR: "Brazil",
-    CA: "Canada",
-    CAR: "Caribbean",
-    CN: "China",
-    CR: "Costa Rica",
-    HR: "Croatia",
-    CU: "Cuba",
-    CZ: "Czech Republic",
-    DO: "Dominican Republic",
-    FR: "France",
-    DE: "Germany",
-    GH: "Ghana",
-    GR: "Greece",
-    GT: "Guatemala",
-    HK: "Hong Kong",
-    HU: "Hungary",
-    IN: "India",
-    IS: "Iceland",
-    IT: "Italy",
-    JP: "Japan",
-    MX: "Mexico",
-    NL: "Netherlands",
-    PE: "Peru",
-    PL: "Poland",
-    ZA: "South Africa",
-    ES: "Spain",
-    UG: "Uganda",
-    GB: "United Kingdom",
-    VN: "Vietnam",
-};
-const levels = {
-    UG: "Undergraduate",
-    GR: "Graduate"
+function inList(list, word) {
+    if (!list) return false;
+    for (let i = 0; i < list.length; i++) {
+        list[i] += '';
+        word += '';   
+        if (list[i].toLowerCase() == word.toLowerCase())
+            return true;
+    }
+    return false;
 }
-class Person {
-    constructor(fname, lname, language, proficiency, email, 
-        department, country, travelled, project, partnerInstitutions) {
-        this.state = {
-            "First Name": fname,
-            "Last Name": lname,
-            "Language": language,
-            "Level of Proficiency": proficiency,
-            "Email": email,
-            "College": departments[department]["College"],
-            "Department": departments[department]["Name"],
-            "Country": countries[country],
-            "Travelled (Y/N)": travelled,
-            "Project": project,
-            "Partner Institutions": partnerInstitutions
-        };
+function capitalize(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+}
+class DataItem {
+    constructor(data) {
+        this.state = data;
     }
-    getLastName() {
-        return this.state["Last Name"];
-    }
-    getLanguage() {
-        return this.state["Language"];
-    }
-    getDisplayData(keys) {
+    getDisplayData() {
         let displayData = [];
-        for (let i = 0; i < keys.length; i++) {
-            displayData.push(this.state[keys[i]]);
+        for (let item in this.state) {
+            displayData.push(this.state[item]);
         }
         return displayData;
     }
+    getKeys() {
+        let keys = [];
+        for (let item in this.state) {
+            keys.push(item);
+        }
+        return keys;
+    }
 }
-class Program {
-    constructor(term, name, countries, colleges, departments, dates, levels, credits) {
+class Table {
+    constructor(id, headerData, rowData, classes, excludedDisplays) {
         this.state = {
-            "Term" : term,
-            "Program Name" : name,
-            "Country" : countries,
-            "College" : colleges,
-            "Dept." : departments,
-            "Dates" : dates,
-            "Level" : levels,
-            "Credits Avail" : credits,
+            id : id,
+            classes : classes,
+            headerRow: this.createHeaderRow(headerData, excludedDisplays),
+            headerData : headerData,
+            contentRows : this.createContentRows(rowData, headerData, id, excludedDisplays),
+            rowData : rowData,
         };
-        if (this.state["Dates"][0] == "UG") console.log(this.state["Program Name"]);
+        this.HTMLrepresentation = this.buildHTMLrepresentation();
     }
-    getCountryNames() {
-        let names = [];
-        for (let i = 0; i < this.state["Country"].length; i++) {
-            names.push(countries[this.state["Country"][i]]);
+    createHeaderRow(headerData, excludedDisplays) {
+        let headerRow = document.createElement('tr');
+        for (let i = 0; i < headerData.length; i++) {
+            if (inList(excludedDisplays, headerData[i])) continue;
+            let header = document.createElement('th');
+            header.appendChild(document.createTextNode(headerData[i]));
+            headerRow.appendChild(header);
         }
-        return names;
+        return headerRow;
     }
-    getName() {
-        return this.state["Program Name"];
+    createContentRows(rowData, headerData, id, excludedDisplays) {
+        let contentRows = [];
+        for (let i = 0; i < rowData.length; i++) {
+            let row = document.createElement('tr');
+            for (let j = 0; j < rowData[i].length; j++) {
+                if (inList(excludedDisplays, headerData[j])) continue;
+                let item = document.createElement('td');
+                item.setAttribute('class', id + headerData[j] + 'item');
+                item.appendChild(document.createTextNode(
+                    rowData[i][j]
+                ));
+                row.appendChild(item);
+            }
+            contentRows.push(row);
+        }
+        return contentRows;
     }
-    getTerm() {
-        return terms[this.state["Term"]];
+    buildHTMLrepresentation() {
+        let table = document.createElement('table');
+        table.setAttribute('id', this.state.id);
+        table.setAttribute('class', this.state.classes);
+        table.appendChild(this.state.headerRow);
+        for (let i = 0; i < this.state.contentRows.length; i++) {
+            table.appendChild(this.state.contentRows[i]);
+        }
+        return table;
     }
-    getDates() {
-        return this.state["Dates"][0] + " - " + this.state["Dates"][1];
+    getTableHTML() {
+        return this.HTMLrepresentation;
     }
-    getCountriesString() {
-        let countries = this.getCountryNames();
-        let countriesString = "";
-        for (let i = 0; i < countries.length; i++) {
-            countriesString += countries[i];
-            if (i != countries.length - 1) {
-                countriesString += ", ";
+    displayRows(reqs) {
+        let displaySome = false;
+        for (let i = 0; i < this.state.rowData.length; i++) {
+            this.state.contentRows[i].style.display = "none";
+            let failsTest = false;
+            rowLoop:
+            for (let key in reqs) {
+                for (let j = 0; j < this.state.rowData[i].length; j++) {
+                    if (key == this.state.headerData[j]) {
+                        if (reqs[key] != this.state.rowData[i][j]) {
+                            failsTest = true;
+                            break rowLoop;
+                        }
+                        break;
+                    }
+                }
+            }
+            if(!failsTest && !jQuery.isEmptyObject(reqs)) {
+                this.state.contentRows[i].style.display = "flex";
+                displaySome = true;
             }
         }
-        return countriesString;
+        if (displaySome) this.state.headerRow.style.display = "flex";
+        else this.state.headerRow.style.display = "none";
+        this.color();
     }
-    getCollegesString() {
-        let collegesString = "";
-        for (let i = 0; i < this.state["College"].length; i++) {
-            collegesString += this.state["College"][i];
-            if (i != this.state["College"].length - 1) {
-                collegesString += ", ";
+    color() {
+        let count = 0;
+        for (let i = 0; i < this.state.contentRows.length; i++) {
+            if (this.state.contentRows[i].style.display != "none") {
+                if (++count % 2 == 0) {
+                    this.state.contentRows[i].style.backgroundColor = "#e3e3e3";
+                } else {
+                    this.state.contentRows[i].style.backgroundColor = "#ffffff"
+                }
             }
         }
-        return collegesString;
-    }
-    getDepartmentsString() {
-        let departmentsString = "";
-        for (let i = 0; i < this.state["Dept."].length; i++) {
-            departmentsString += this.state["Dept."][i];
-            if (i != this.state["Dept."].length - 1) {
-                departmentsString += ", ";
-            }
-        }
-        return departmentsString;
-    }
-    getCreditsAvail() {
-        return this.state["Credits Avail"];
-    }
-    getDisplayList() {
-        let displayList = [];
-        displayList.push(this.getTerm());
-        displayList.push(this.getName());
-        displayList.push(this.getCountriesString());
-        displayList.push(this.getCollegesString());
-        displayList.push(this.getDepartmentsString());
-        displayList.push(this.getDates());
-        displayList.push(this.getCreditsAvail());
-        return displayList;
     }
 }
-const programs = [
-    // Spring
-    new Program("Spring", "Service & Community in Rural Dominican Republic", 
-        ["DO"], ["Science"], ["LOC", "SOC"],["01/03/2020", "01/11/2020"],["UG"], 1),
-    new Program("Spring", "Intercultural Experience: Mexico", 
-        ["MX"], ["Arts"], ["COM"],["03/06/2020", "03/14/2020"],["UG"], 3),
-    new Program("Spring", "iASE Dominican Republic: Grassroots Community Development and Cross-Cultural Connections", 
-        ["DO"], ["Science"], ["LLC"],["03/07/2020", "03/14/2020"],["UG"], 1),
-    new Program("Spring", "Education for Liberation and Sustainability in Indigenous Guatemala", 
-        ["GT"], ["Honors"], ["HON"],["03/07/2020", "03/14/2020"],["UG"], 3),
-    new Program("Spring", "iASE Belize: Sustainable Agroforestry and Community Development", 
-        ["BZ"], ["Education"], [],["03/07/2020", "03/14/2020"],["UG"], 1),
-    new Program("Spring", "Business, Society & Sustainability in the Yucatán, Mexico", 
-        ["MX"], ["Business"], ["BUS", "MBA"],["03/07/2020", "03/14/2020"],["UG", "GR"], 3),
-    new Program("Spring", "iASE Costa Rica: Conservation, Organic Farming, and Ecotourism", 
-        ["CR"], ["Science"], ["LLC"],["03/07/2020", "03/14/2020"],["UG"], 1),
-    new Program("Spring", "UK Finance", 
-        ["GB"], ["Business"], ["FIN"],["03/07/2020", "03/14/2020"],["UG"], 3),
-    new Program("Spring", "Student Affairs Administration in the United Kingdom", 
-        ["GB"], ["Education"], ["SAA"],["04/16/2020", "04/29/2020"],["GR"], 3),
-    new Program("Spring", "Bermuda Finance", 
-        ["BM"], ["Business"], ["FIN"],["05/10/2020", "05/16/2020"],["UG"], 3),
-    new Program("Spring", "Secret Codes of World War II", 
-        ["GB"], ["Science"], ["MAT"],["05/13/2020", "05/24/2020"],["UG"], 2),
-    // Summer I
-    new Program("Summer I", "Angers Summer Business Program", 
-        ["FR"], ["Business"], ["BUS", "FIN", "MKT"],["05/20/2020", "06/19/2020"],["UG"], 9),
-    new Program("Summer I", "Leadership and Culture-Barcelona: Leadership in Social Movements", 
-        ["ES"], ["Education"], ["HPC"],["05/10/2020", "05/21/2020"],["UG"], 3),
-    new Program("Summer I", "War in Europe: The Eastern Front", 
-        ["DE", "HU", "PL", "CZ"], ["Science"], ["SOC", "HIS"],["05/26/2020", "06/17/2020"],["UG"], 6),
-    new Program("Summer I", "Global Context for Accounting - International Business in Asia Pacific", 
-        ["AU"], ["Business"], ["BUS", "MBA"],["05/09/2020", "05/24/2020"],["UG", "GR"], 3),
-    new Program("Summer I", "The Languages & Cultures of Northern Spain", 
-        ["ES"], ["Science"], ["SNH"],["05/24/2020", "06/24/2020"],["UG"], 6),
-    new Program("Summer I", "Endogenous Development in Ghana", 
-        ["GH"], ["Arts"], ["SD"],["05/23/2020", "06/29/2020"],["UG"], 6),
-    new Program("Summer I", "Spain LLC", 
-        ["ES"], ["Science"], ["LLC"],["05/25/2020", "06/25/2020"],["UG"], 6),
-    new Program("Summer I", "Climate Change, Glaciers, and Water Resources", 
-        ["PE"], ["Science"], ["GHY"],["06/10/2020", "06/26/2020"],["UG"], 6),
-    new Program("Summer I", "Appropriate Technology in Peru", 
-        ["PE"], ["Arts"], ["STBE"],["06/11/2020", "06/28/2020"],["UG", "GR"], 6),
-    new Program("Summer I", "Music and Reconstruction of South Africa", 
-        ["ZA"], ["Music"], ["MUS"],["05/10/2020", "05/25/2020"],["UG"], 3),
-    new Program("Summer I", "Documenting Dutch Culture", 
-        ["NL"], ["Arts"], ["COM"],["05/16/2020", "06/06/2020"],["UG"], 6),
-    new Program("Summer I", "Universita di Padua Bioarchaeological Field School", 
-        ["IT"], ["Science"], ["ANT"],["06/24/2020", "07/20/2020"],["UG"], 6),
-    new Program("Summer I", "Biological Investigations in Vietnam", 
-        ["VN"], ["Science"], ["BIO"],["05/12/2020", "06/04/2020"],["UG", "GR"], 6),
-    new Program("Summer I", "Global Supply Chain, Logistics, and Analytics", 
-        ["IN"], ["Business"], ["SCM", "MBA"],["05/11/2020", "05/24/2020"],["UG", "GR"], 3),
-    new Program("Summer I", "Prague Interdisciplinary Design Studio", 
-        ["CZ"], ["Arts"], ["IND"],["05/25/2020", "06/29/2020"],["UG"], 6),
-    new Program("Summer I", "Cuba: Past, Present, and Future", 
-        ["CU"], ["Honors", "Science"], ["HON", "WRC"],["06/06/2020", "06/17/2020"],["UG"], 6),
-    new Program("Summer I", "Love, Sex and Power", 
-        ["FR", "IT"], ["Science"], ["REL", "PHL"],["05/29/2020", "06/19/2020"],["UG"], 6),
-    new Program("Summer I", "Arctic Field Ecology", 
-        ["CA"], ["Science"], ["BIO"],["06/03/2020", "06/19/2020"],["UG"], 3),
-    new Program("Summer I", "Germany's Great Cities: Trier and Berlin", 
-        ["DE"], ["Science"], ["GER"],["05/12/2020", "06/09/2020"],["UG"], 3),
-    new Program("Summer I", "Italy Summer Field Geology", 
-        ["IT"], ["Science"], ["GLY"],["05/16/2020", "06/27/2020"],["UG"], 6),
-    new Program("Summer I", "Crossing Borders: Higher Education & Technology in the New Europe", 
-        ["AT"], ["Education"], ["ITC"],["05/10/2020", "05/18/2020"],["GR"], 6),
-    new Program("Summer I", "Fermented Foods and Beverages of the World", 
-        ["GR"], ["Science"], ["FER"],["06/12/2020", "06/25/2020"],["UG"], 3),
-    new Program("Summer I", "Cruise Line Industry in the Caribbean", 
-        ["CAR"], ["Health"], ["RM"],["05/10/2020", "05/17/2020"],["UG"], 3),
-    new Program("Summer I", "Theatre in Europe, Past and Present", 
-        ["GB"], ["Arts"], ["THR"],["05/11/2020", "06/01/2020"],["UG"], 6),
-    new Program("Summer I", "Brazil: Energy, Ecology, and Environment", 
-        ["BR"], ["Business"], ["BUS", "MBA"],["05/11/2020", "05/23/2020"],["UG", "GR"], 3),
-    new Program("Summer I", "Art Spain", 
-        ["ES"], ["Arts"], ["ART"],["05/26/2020", "06/16/2020"],["UG"], 6),
-    new Program("Summer I", "International Experience: Japan", 
-        ["JP"], ["Business"], ["MBA", "BUS"],["05/11/2020", "05/20/2020"],["UG", "GR"], 3),
-    new Program("Summer I", "Uganda: A Local to Global Experience", 
-        ["UG"], ["Health"], ["SW"],["06/12/2020", "07/04/2020"],["UG", "GR"], 6),
-    new Program("Summer I", "Holland Fellows", 
-        ["CN", "HK"], ["Business"], ["BUS"],["05/12/2020", "05/28/2020"],["UG"], 3),
-    new Program("Summer I", "Exploring Youth Sexual Health Culture and Sexuality Education in England", 
-        ["GB"], ["Health"], ["HPE"],["06/13/2020", "06/21/2020"],["UG"], 3),
-    new Program("Summer I", "Poland Communication",
-        ["PL"], ["Arts"], ["COM"],["05/12/2020", "06/09/2020"],["UG"], 6),
-    new Program("Summer I", "Human Development and Creative Writing in Croatia", 
-        ["HR"], ["Science"], ["ENG", "PSY"],["06/07/2020", "07/05/2020"],["UG"], 6),
-    new Program("Summer I", "Advertising, Media, and Business in China", 
-        ["CN"], ["Arts"], ["COM"],["05/12/2020", "06/01/2020"],["UG"], 6),
-    new Program("Summer I", "Architecture and Design from Paris to Amsterdam", 
-        ["FR", "BE", "NL"], ["Arts"], ["IND", "INT"],["05/13/2020", "06/04/2020"],["UG"], 6),
-    // Summer II
-    new Program("Summer II", "Animal Based Tourism: A Sampler Within the UK", 
-        ["GB"], ["Business"], ["HOS"],["07/23/2020", "08/03/2020"],["UG"], 3),
-    new Program("Summer II", "Renaissance London", 
-        ["GB"], ["Science"], ["ENG"],["07/06/2020", "07/27/2020"],["UG"], 6),
-    new Program("Summer II", "Race & Justice in South Africa and the US", 
-        ["ZA"], ["Science"], ["CJ"],["07/10/2020", "08/01/2020"],["UG"], 6),
-    new Program("Summer II", "Comparative Study of Educational Systems of NC and Free State", 
-        ["ZA"], ["Education"], ["LES"],["07/08/2020", "07/27/2020"],["GR"], 3),
-    new Program("Summer II", "Land of Fire and Ice", 
-        ["IS"], ["Science"], ["GLY", "HPC"],["07/22/2020", "08/06/2020"],["UG"], 4),
-]
-const people = [
-    new Person("Claire", "Carrfield", "Farsi", "Fluent", "Carrfieldcg@notreallyapp.edu", 
-        "SW", "AT", "N", "Research", "Daymark Recovery Services"),
-    new Person("Jenny", "Ratford", "German", "Proficient", "Ratfordjj@notreallyapp.edu", 
-        "MAT", "DE", "Y", "Conference", "None"),
-    new Person("Lura", "Jasper", "Japanese", "Fluent", "Jasperlv@notreallyapp.edu", 
-        "ANT", "JP", "Y", "Research", "None"),
-    new Person("Iris", "Wendland", "Danish", "Native Speaker", "Wendlandia@notreallyapp.edu", 
-        "BUS", "NL", "Y", "Visiting Professor", "None"),
-    new Person("Lup", "Lopez", "Spanish", "Native Speaker", "Lopezll@notreallyapp.edu", 
-        "GHY", "PE", "N", "Teaching", "None"),
-    new Person("Jenny", "Calendar", "French", "Fluent", "Calendarjp@notreallyapp.edu", 
-        "LES", "FR", "N", "Teaching", "None"),
-    new Person("Kareena", "Rizen", "Russian", "Proficient", "Rizenkp@notreallyapp.edu", 
-        "WRC", "CZ", "Y", "Research", "None"),
-    new Person("Amahle", "Vashawn", "French", "Native Speaker", "Vashawnak@notreallyapp.edu", 
-        "PHL", "ZA", "Y", "Conference", "None"),
-    new Person("Yumi", "Rokujou", "Chinese", "Proficient", "Rokujouyi@notreallyapp.edu", 
-        "MUS", "HK", "Y", "Conference", "None"),
-    new Person("Nanami", "Erisa", "Korean", "Proficient", "Erisang@notreallyapp.edu", 
-        "BIO", "CN", "N", "Research", "None"),
-]
+class SearchButton {
+    constructor(type, category, value, list, page) {
+        this.state = {
+            type : type,
+            category : category,
+            value : value,
+            list : list,
+            page : page,
+            selected : false,
+        }
+        this.HTMLrepresentation = this.buildHTMLrepresentation();
+    }
+    buildHTMLrepresentation() {
+        let _this = this;
+        let listItem = document.createElement('li');
+        listItem.setAttribute('class', 'searchButton deselectedButton');
+        listItem.appendChild(document.createTextNode(this.state.value));
+        listItem.onclick = function() {
+            if (_this.state.selected) {
+                _this.state.page.removeFromDisplay(_this.state.type, _this.state.category, _this.state.value);
+                _this.deselect();
+            } else {
+                _this.state.page.addToDisplay(_this.state.type, _this.state.category, _this.state.value);
+                _this.select();
+            }
+        }
+        return listItem;
+    }
+    getButtonHTML() {
+        return this.HTMLrepresentation;
+    }
+    deselect() {
+        this.state.selected = false;
+        this.HTMLrepresentation.setAttribute('class', 'searchButton deselectedButton')
+    }
+    select() {
+        for(let i = 0; i < this.state.list.length; i++) {
+            this.state.list[i].deselect();
+        }
+        this.state.selected = true;
+        this.HTMLrepresentation.setAttribute('class', 'searchButton selectedButton')
+    }
+}
+class SearchBar {
+    constructor(id, searchTypes, classes, page) {
+        this.state = {
+            id : id,
+            searchTypes : searchTypes,
+            classes : classes,
+            searchButtons : {},
+            page : page,
+        }
+        this.HTMLrepresentation = this.buildHTMLrepresentation();
+    }
+    buildHTMLrepresentation() {
+        let searchBar = document.createElement('div');
+        searchBar.setAttribute('id', this.state.id);
+        searchBar.setAttribute('class', this.state.classes);
+
+        let buttonSection = document.createElement('div');
+        buttonSection.setAttribute('class', 'buttonSearchSection');
+        let listSection = document.createElement('div');
+        listSection.setAttribute('class', 'listSearchSection');
+
+        for (let key in this.state.searchTypes) {
+            this.state.searchButtons[key] = [];
+            let dropDownButton = document.createElement('button');
+            dropDownButton.setAttribute('class', 'dropDownButton');
+            dropDownButton.appendChild(document.createTextNode(key));
+            dropDownButton.onmouseover = function() {
+                let lists = document.querySelectorAll(".dropDownList");
+                for(let i = 0; i < lists.length; i++) {
+                    if (lists[i].id == key+"list") {
+                        lists[i].style.display = "inline";
+                    } else {
+                        lists[i].style.display = "none";
+                    }
+                }
+            }
+            buttonSection.appendChild(dropDownButton);
+            let list = document.createElement('ul');
+            list.setAttribute('class', 'dropDownList');
+            list.setAttribute('id', key + "list");
+            for (let i = 0; i < this.state.searchTypes[key].length; i++) {
+                let listItem = new SearchButton(this.state.id, key, this.state.searchTypes[key][i], this.state.searchButtons[key], this.state.page);
+                list.appendChild(listItem.getButtonHTML());
+                this.state.searchButtons[key].push(listItem);
+            }
+            listSection.appendChild(list);
+        }
+        searchBar.appendChild(buttonSection);
+        searchBar.appendChild(listSection);
+        return searchBar;
+    }
+    getSearchBarHTML() {
+        return this.HTMLrepresentation;
+    }
+    
+}
 class QEP {
     constructor() {
-        let study
+        this.data = this.createData();
         this.state = {
-            title : "Office of the Quality Enhancement Plan",
-            subtitle: "Appalchian State University",
+            topbar : {
+                title : "Office of the Quality Enhancement Plan",
+                subtitle: "Appalchian State University",
+            },
             footer: {
                 linkList : {
                     "Home" : "https://qep.appstate.edu",
@@ -353,71 +247,37 @@ class QEP {
                     link : "https://www.appstate.edu",
                 }
             },
-            sections : {
+            pages : {
                 home : {
                     imageUrl: "../images/qep-logo-white.png",
                     pdfTitle: "QEP Official Documentation",
                     pdfImgUrl: "../images/qep_cover_revised.png",
                     pdfUrl: "https://qep.appstate.edu/sites/qep.appstate.edu/files/QEP-report-final_0.pdf",
                 },
-                language : {
-                    name : "Search for People by Language",
-                    searchChoices: {
-                        "Language" : this.getLanguages(),
-                        "Department": this.getDepartments()
+                searchPages : {
+                    language : {
+                        title : "Search for People by Language",
+                        id : "language",
+                        table : this.buildTable("language"),
+                        searchBar : this.buildSearchBar("language",
+                            ["Language", "Proficiency"]),
+                        display : {}
                     },
-                    info : {
-                        dataHeaders : [
-                            "First Name",
-                            "Last Name",
-                            "Language",
-                            "Level of Proficiency",
-                            "Email"
-                        ],
-                        data : this.getLanguageDisplayData()
-                    }
-                },
-                other :  {
-                    name : "Search for People by Academic Affiliation, County, and Last Name",
-                    searchChoices : {
-                        "Academic Department": this.getDepartments(),
-                        "Academic College ": this.getColleges(),
-                        "Country" : this.getCountryList(),
-                        "Last Name" : this.getLastNames(),
+                    project :  {
+                        title : "Search for People by Academic Affiliation, County, and Last Name",
+                        id : "project",
+                        table : this.buildTable("project"),
+                        searchBar : this.buildSearchBar("project",
+                            ["Last Name", "Academic College", "Academic Department", "Country"]),
+                        display : {}
                     },
-                    info : {
-                        dataHeaders : [
-                            "First Name",
-                            "Last Name",
-                            "College",
-                            "Department",
-                            "Country",
-                            "Travelled (Y/N)",
-                            "Project",
-                            "Partner Institutions"
-                        ],
-                        data : this.getOtherDisplayData()
-                    }
-                },
-                studyAbroad : {
-                    name : "Search for Available Study Abroad Opportunities",
-                    searchChoices : {
-                        "Term": this.getTermList(),
-                        "Program Name": this.getProgramNameList(),
-                        "Country": this.getCountryList(),
-                        "Dates": this.getDateList()
-                    },
-                    info : {
-                        dataHeaders : [
-                            "Term",
-                            "Program Name",
-                            "Country",
-                            "College",
-                            "Dept.",
-                            "Dates",
-                            "Credits Avail."
-                        ],
-                        data : this.getStudyAbroadDisplayList()
+                    studyAbroad : {
+                        title : "Search for Available Study Abroad Opportunities",
+                        id : "studyAbroad",
+                        table : this.buildTable("studyAbroad"),
+                        searchBar : this.buildSearchBar("studyAbroad",
+                            ["Term", "Program Name", "Country", "Dates"]),
+                        display : {}
                     }
                 }
             },
@@ -431,19 +291,16 @@ class QEP {
         let titleSection = document.createElement('div');
         titleSection.setAttribute('id', 'titleSection')
         let title = document.createElement('h1');
-        title.appendChild(document.createTextNode(this.state.title));
+        title.appendChild(document.createTextNode(this.state.topbar.title));
         let subtitle = document.createElement('h2');
-        subtitle.appendChild(document.createTextNode(this.state.subtitle));
+        subtitle.appendChild(document.createTextNode(this.state.topbar.subtitle));
         titleSection.appendChild(title);
         titleSection.appendChild(subtitle);
         titleSection.onclick = function() {
             let articles = document.querySelectorAll('.mainArticle');
             for (let i = 0; i < articles.length; i++) {
-                if (articles[i].id == "home") {
-                    articles[i].style.display = "flex";
-                } else {
-                    articles[i].style.display = "none";
-                }
+                if (articles[i].id == "home") articles[i].style.display = "flex";
+                else  articles[i].style.display = "none";
             }
         }
         
@@ -451,18 +308,16 @@ class QEP {
         tabs.setAttribute('id', 'topTabs');
 
         let _this = this;
-        for (let key in this.state.sections) {
-            if (key != "home") {
+        for (let key in this.state.pages.searchPages) {
                 let tab = document.createElement('li');
-                let tabButton = document.createElement('button');
-                tabButton.setAttribute('class', 'tabButton');
-                tabButton.appendChild(document.createTextNode(this.state.sections[key].name));
-                tabButton.onclick = function() {
-                    _this.showTab(key)
-                }
-                tab.appendChild(tabButton);
-                tabs.appendChild(tab);
+            let tabButton = document.createElement('button');
+            tabButton.setAttribute('class', 'tabButton');
+            tabButton.appendChild(document.createTextNode(this.state.pages.searchPages[key].title));
+            tabButton.onclick = function() {
+                _this.showTab(key)
             }
+            tab.appendChild(tabButton);
+            tabs.appendChild(tab);
         }
         topbar.appendChild(titleSection);
         topbar.appendChild(tabs);
@@ -505,29 +360,27 @@ class QEP {
     pageBlockHeader() {
         let pageBlockHeader = document.createElement('div');
         pageBlockHeader.setAttribute('id', 'pageBlockHeader');
-
-
         return pageBlockHeader;
     }
-    homeArticle() {
+    homePage(homeData) {
         let homeArticle = document.createElement('article');
         homeArticle.setAttribute('id', 'home');
         homeArticle.setAttribute('class', 'mainArticle');
         homeArticle.style.display = "flex";
         let homeImg = document.createElement('img');
         homeImg.setAttribute('id', 'homeImg');
-        homeImg.src = this.state.sections.home.imageUrl;
+        homeImg.src = homeData.imageUrl;
 
         let pdfSection = document.createElement('div');
         pdfSection.setAttribute('id', 'pdfSection');
         let pdfTitle = document.createElement('h2');
-        pdfTitle.appendChild(document.createTextNode(this.state.sections.home.pdfTitle));
+        pdfTitle.appendChild(document.createTextNode(homeData.pdfTitle));
         let pdfLink = document.createElement('a');
         pdfLink.setAttribute('id', 'pdfLink');
-        pdfLink.href = this.state.sections.home.pdfUrl;
+        pdfLink.href = homeData.pdfUrl;
         let pdfImg = document.createElement('img');
         pdfImg.setAttribute('id', 'pdfImg');
-        pdfImg.src = this.state.sections.home.pdfImgUrl;
+        pdfImg.src = homeData.pdfImgUrl;
         pdfLink.appendChild(pdfImg);
 
         pdfSection.appendChild(pdfTitle);
@@ -537,227 +390,160 @@ class QEP {
         homeArticle.appendChild(pdfSection);
         return homeArticle;
     }
-    languageSearchArticle() {
-        let languageSearchArticle = document.createElement('article');
-        languageSearchArticle.setAttribute('id', 'language');
-        languageSearchArticle.setAttribute('class', 'mainArticle');
-        languageSearchArticle.appendChild(this.buildSearchBar(this.state.sections.language.searchChoices))
-        languageSearchArticle.appendChild(this.buildResultsTable(this.state.sections.language.info));
-        return languageSearchArticle;
-    }
-    otherSearchArticle() {
-        let otherSearchArticle = document.createElement('article');
-        otherSearchArticle.setAttribute('id', 'other');
-        otherSearchArticle.setAttribute('class', 'mainArticle');
-        otherSearchArticle.appendChild(this.buildSearchBar(this.state.sections.other.searchChoices))
-        otherSearchArticle.appendChild(this.buildResultsTable(this.state.sections.other.info));
-        return otherSearchArticle;
-    }
-    studyAbroadArticle() {
-        let studyAbroadSearchArticle = document.createElement('article');
-        studyAbroadSearchArticle.setAttribute('id', 'studyAbroad');
-        studyAbroadSearchArticle.setAttribute('class', 'mainArticle');
-        let searchTypes = this.state.sections.studyAbroad.searchChoices;
-        studyAbroadSearchArticle.appendChild(this.buildSearchBar(this.state.sections.studyAbroad.searchChoices))
-        studyAbroadSearchArticle.appendChild(this.buildResultsTable(this.state.sections.studyAbroad.info));
-        return studyAbroadSearchArticle;
-    }
-    buildSearchBar(info) {
-        let searchBar = document.createElement('div');
-        searchBar.setAttribute('class', 'searchBar');
-        let buttonSection = document.createElement('div');
-        buttonSection.setAttribute('id', 'buttonSearchSection');
-        let listSection = document.createElement('div');
-        listSection.setAttribute('id', 'listSearchSection');
-        for (let key in info) {
-            let dropDownButton = document.createElement('button');
-            dropDownButton.setAttribute('class', 'dropDownButton');
-            dropDownButton.appendChild(document.createTextNode(key));
-            dropDownButton.onmouseover = function() {
-                let lists = document.querySelectorAll(".dropDownList");
-                for(let i = 0; i < lists.length; i++) {
-                    if (lists[i].id == key+"list") {
-                        lists[i].style.display = "inline";
-                    } else {
-                        lists[i].style.display = "none";
-                    }
-                }
-            }
-            buttonSection.appendChild(dropDownButton);
-            let list = document.createElement('ul');
-            list.setAttribute('class', 'dropDownList');
-            list.setAttribute('id', key + "list");
-            for (let i = 0; i < info[key].length; i++) {
-                let listItem = document.createElement('li');
-                listItem.appendChild(document.createTextNode(info[key][i]));
-                list.appendChild(listItem);
-            }
-            listSection.appendChild(list);
+    buildSearchBar(id, searchTypes) {
+        let searchData = {};
+        for (let i = 0; i < searchTypes.length; i++) {
+            searchData[searchTypes[i]] = this.data[id]["searchBy"][searchTypes[i]];
         }
-        searchBar.appendChild(buttonSection);
-        searchBar.appendChild(listSection);
-        return searchBar;
+        return new SearchBar(id, searchData, "searchBar", this);
     }
-    buildResultsTable(info) {
-        let table = document.createElement('table');
-        table.setAttribute('class', 'infoTable');
-
-        let headerRow = document.createElement('tr');
-        headerRow.setAttribute('class', 'headerRow');
-        for (let heading in info.dataHeaders) {
-            let item = document.createElement('th');
-            item.appendChild(document.createTextNode(info.dataHeaders[heading]));
-            headerRow.appendChild(item);
+    buildTable(id) {
+        let excludedDisplays = [];
+        if (id == "language") {
+            excludedDisplays.push("WebPage");
+        } else if (id == "project") {
+            excludedDisplays.push("Collaboration");
+            excludedDisplays.push("Location");
+        } else if (id == "studyAbroad") {
+            excludedDisplays.push("Availability");
         }
-        table.appendChild(headerRow);
-
-        for (let i = 0; i < info.data.length; i++) {
-            let row = document.createElement('tr');
-            for (let j = 0; j < info.data[i].length; j++) {
-                let item = document.createElement('td');
-                item.appendChild(document.createTextNode(
-                    info.data[i][j]
-                ));
-                row.appendChild(item);
-            }
-            table.appendChild(row);
-        }
-        return table;
+        return new Table(id, this.getHeaderData(id), this.getDisplayData(id), "infoTable", excludedDisplays);
+    }
+    buildSearchPage(searchData) {
+        let searchPage = document.createElement('article');
+        searchPage.setAttribute('id', searchData.id);
+        searchPage.setAttribute('class', 'mainArticle');
+        let searchBarWrapper = document.createElement('section');
+        searchBarWrapper.setAttribute('class', 'searchBarWrapper');
+        searchBarWrapper.appendChild(searchData.searchBar.getSearchBarHTML())
+        let tableWrapper = document.createElement('section');
+        tableWrapper.setAttribute('class', 'tableWrapper');
+        tableWrapper.appendChild(searchData.table.getTableHTML());
+        searchPage.appendChild(searchBarWrapper);
+        searchPage.appendChild(tableWrapper);
+        return searchPage;
     }
     showTab(key) {
-        for (let section in this.state.sections) {
-            if (section == key) {
-                document.getElementById(section).style.display = "flex";
-            } else {
-                document.getElementById(section).style.display = "none";
-            }
+        if (key != "home ") document.getElementById("home").style.display = "none";
+        else document.getElementById("home").style.display = "flex";
+        for (let section in this.state.pages.searchPages) {
+            if (section == key) document.getElementById(section).style.display = "flex";
+            else document.getElementById(section).style.display = "none";
         }
     }
-    getCountryList() {
-        let countryList = [];
-        for (let i = 0; i < programs.length; i++) {
-            let countryNames = programs[i].getCountryNames();
-            for (let j = 0; j < countryNames.length; j++) {
-                if (!this.inList(countryList, countryNames[j])) {
-                    countryList.push(countryNames[j]);
+    getHeaderData(type) {
+        return this.data[type].list[0].getKeys();
+    }
+    getDisplayData(type) {
+        let displayData = [];
+        let displayList = this.data[type].list;
+        for (let i = 0; i < displayList.length; i++)
+            displayData.push(displayList[i].getDisplayData());
+        return displayData;
+    }
+    createData() {
+        let data = {
+            language : {
+                list : [],
+                searchBy : {}
+            },
+            project : {
+                list : [],
+                searchBy : {}
+            },
+            studyAbroad : {
+                list : [],
+                searchBy : {}
+            }
+        }
+        for (let i = 0; i < language.result.length; i++) {
+            let item = this.formatLanguage(language.result[i]);
+            data.language.list.push(new DataItem(item));
+            for (let key in item) {
+                if (!inList(data.language.searchBy[key], item[key])) {
+                    if (!data.language.searchBy[key]) data.language.searchBy[key] = [];
+                    data.language.searchBy[key].push(item[key]);
                 }
             }
         }
-        return countryList;
-    }
-    getProgramNameList() {
-        let programList = [];
-        for (let i = 0; i < programs.length; i++) {
-            programList.push(programs[i].getName());
-        }
-        return programList;
-    }
-    getTermList() {
-        let termList = [];
-        for (let i = 0; i < programs.length; i++) {
-            let term = programs[i].getTerm();
-            if (!this.inList(termList, term)) {
-                termList.push(term);
+        for (let i = 0; i < project.result.length; i++) {
+            let item = this.formatProject(project.result[i]);
+            data.project.list.push(new DataItem(item));
+            for (let key in item) {
+                if (!inList(data.project.searchBy[key], item[key])) {
+                    if (!data.project.searchBy[key]) data.project.searchBy[key] = [];
+                    data.project.searchBy[key].push(item[key]);
+                }
             }
         }
-        return termList;
-    }
-    getDateList() {
-        let dateList = [];
-        for (let i = 0; i < programs.length; i++) {
-            let dates = programs[i].getDates();
-            if (!this.inList(dateList, dates)) {
-                dateList.push(dates);
+        for (let i = 0; i < study_abroad.result.length; i++) {
+            let item = this.formatStudyAbroad(study_abroad.result[i]);
+            data.studyAbroad.list.push(new DataItem(item));
+            for (let key in item) {
+                if (!inList(data.studyAbroad.searchBy[key], item[key])) {
+                    if (!data.studyAbroad.searchBy[key]) data.studyAbroad.searchBy[key] = [];
+                    data.studyAbroad.searchBy[key].push(item[key]);
+                }
             }
         }
-        return dateList;
+        return data;
     }
-    getColleges() {
-        let collegeList = [];
-        for (let key in colleges) {
-            collegeList.push(colleges[key]);
+    formatLanguage(item) {
+        return {
+            "First Name" : item["Firstname"],
+            "Last Name" : item["Lastname"],
+            "Language": item["Language"],
+            "Proficiency": capitalize(item["Proficiency"]),
+            "Email": item["Email"],
+            "WebPage": item["WebPage"]
         }
-        return collegeList;
     }
-    getDepartments() {
-        let departmentList = [];
-        for (let key in departments) {
-            departmentList.push(departments[key]["Name"]);
+    formatProject(item) {
+        return {
+            "First Name" : item["Firstname"],
+            "Last Name" : item["Lastname"],
+            "Academic Department" : item["AcademicDepartment"],
+            "Academic College" : item["AcademicCollege"],
+            "Country" : item["Country"],
+            "Travelled (Y/N)" : item["Travelled"],
+            "Project Description" : item["Country"] + " - " + item["Collaboration"]
+                + (item["Location"] ? (" - " + item["Location"]) : ""),
+            "Collaboration" : item["Collaboration"],
+            "Location" : item["Location"]
         }
-        return departmentList;
     }
-    getLastNames() {
-        let lastNames = [];
-        for (let i = 0; i < people.length; i++) {
-            if (!this.inList(lastNames, people[i].getLastName())) {
-                lastNames.push(people[i].getLastName());
-            }
+    formatStudyAbroad(item) {
+        return {
+            "Term": item["Term"],
+            "Program Name": item["ProgramName"],
+            "Country": item["Country"],
+            "College": item["College"],
+            "Department": item["Department"],
+            "Dates": item["Dates"],
+            "Level": item["Level"],
+            "Credits": item["Credits"].toString(),
+            "Availability": item["Availability"]
         }
-        return lastNames;
     }
-    getLanguages() {
-        let languages = [];
-        for (let i = 0; i < people.length; i++) {
-            if (!this.inList(languages, people[i].getLanguage())) {
-                languages.push(people[i].getLanguage());
-            }
-        }
-        return languages;
+    addToDisplay(type, attribute, value) {
+        this.state.pages.searchPages[type].display[attribute] = value;
+        this.state.pages.searchPages[type].table.displayRows(
+            this.state.pages.searchPages[type].display
+        );
     }
-    inList(list, word) {
-        for (let i = 0; i < list.length; i++) {
-            if (list[i] == word) {
-                return true;
-            }
-        }
-        return false;
+    removeFromDisplay(type, attribute) { 
+        delete this.state.pages.searchPages[type].display[attribute];
+        this.state.pages.searchPages[type].table.displayRows(
+            this.state.pages.searchPages[type].display
+        );
     }
-    getLanguageDisplayData() {
-        let displayData = [];
-        let keys = [
-            "First Name",
-            "Last Name",
-            "Language",
-            "Level of Proficiency",
-            "Email"
-        ];
-        for (let i = 0; i < people.length; i++) {
-            displayData.push(people[i].getDisplayData(keys));
-        }
-        return displayData;
-    }
-    getOtherDisplayData() {
-        let displayData = [];
-        let keys = [
-            "First Name",
-            "Last Name",
-            "College",
-            "Department",
-            "Country",
-            "Travelled (Y/N)",
-            "Project",
-            "Partner Institutions"
-        ];
-        for (let i = 0; i < people.length; i++) {
-            displayData.push(people[i].getDisplayData(keys));
-        }
-        return displayData;
-    }
-    getStudyAbroadDisplayList() {
-        let programDisplayList = [];
-        for (let i = 0; i < programs.length; i++) {
-            programDisplayList.push(programs[i].getDisplayList());
-        }
-        return programDisplayList;
-    }
-    
     load() {
         let contentWrapper = document.createElement('div');
         contentWrapper.setAttribute('id', 'contentWrapper');
-        contentWrapper.appendChild(this.homeArticle());
-        contentWrapper.appendChild(this.languageSearchArticle());
-        contentWrapper.appendChild(this.otherSearchArticle());
-        contentWrapper.appendChild(this.studyAbroadArticle());
+        contentWrapper.appendChild(this.homePage(this.state.pages.home));
+        for (let section in this.state.pages.searchPages) {
+            contentWrapper.appendChild(this.buildSearchPage(this.state.pages.searchPages[section]));
+        }
         document.body.appendChild(this.topbar());
         document.body.appendChild(this.pageBlockHeader());
         document.body.appendChild(contentWrapper);
