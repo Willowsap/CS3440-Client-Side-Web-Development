@@ -493,7 +493,15 @@ class QEP {
                 }
             }
         }
+        data.language.searchBy["Proficiency"] = this.sortProficiencySearch(data.language.searchBy["Proficiency"]);
         return data;
+    }
+    sortProficiencySearch(profSearch) {
+        return [
+            profSearch[1],
+            profSearch[2],
+            profSearch[0],
+        ];
     }
     formatLanguage(item) {
         return {
